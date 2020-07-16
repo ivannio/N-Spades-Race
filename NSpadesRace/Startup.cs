@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NSpadesRace.DataAccess;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace NSpadesRace
 {
@@ -26,6 +28,28 @@ namespace NSpadesRace
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
+
+            var authSettings = Configuration.GetSection("AuthenticationSettings");
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.IncludeErrorDetails = true;
+                    options.Authority = authSettings["Authority"];
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = authSettings["Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = authSettings["Audience"],
+                        ValidateLifetime = true
+                    };
+                }
+                );
+
             services.AddControllers();
             services.AddTransient<ScoreRepository>();
             services.AddTransient<PlayerRepository>();
@@ -42,9 +66,13 @@ namespace NSpadesRace
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

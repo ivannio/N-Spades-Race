@@ -1,24 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Page, Toolbar, Toast, Button, BackButton, ToolbarButton, Icon } from 'react-onsenui';
+import { Page, Toolbar, Button, BackButton, ToolbarButton, Icon, Input, Row, Col } from 'react-onsenui';
+import playerData from '../../../helpers/data/playerData';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import 'onsenui/css/onsenui.css';
 import 'onsenui/css/onsen-css-components.css';
+import './TestTwo.scss';
 
 class TestTwo extends React.Component {
     state = {
       isOpen: false,
+      userName: '',
+      email: '',
+      passWord: '',
     }
   
-    handlePress = () => {
-      this.setState({ isOpen: true })
-      setTimeout(() => { 
-          this.setState({ isOpen: false })
-        }, 3000);
+    handleRegister = () => {
+        const { email, passWord } = this.state;
+        playerData.registerFirebaseUser(email, passWord)
+        console.log(firebase.auth().currentUser)
     }
   
     render() {
-      const { isOpen } = this.state;
-      const { url } = this.props.match;
+      const { userName, email, passWord } = this.state;
   
       return(
         <Page> 
@@ -37,9 +42,39 @@ class TestTwo extends React.Component {
         </ToolbarButton>
       </div>
           </Toolbar>
-          <Button className="onsen-button" onClick={this.handlePress}>test 2 Button</Button>
-          <Link to={'/testone'}><Button className="onsen-button" >Link to page 1</Button></Link>  
-        <Toast isOpen={isOpen}>this page is {url}</Toast>  
+          <Col>
+          <Row>     
+          <Link to={'/testone'}><Button className="onsen-button" >Link to page 1</Button></Link>
+          </Row>
+          <Row>
+          <Input
+            className="user-input"
+            type='text'
+            value={userName} float
+            onChange={(e) => { this.setState({ userName: e.target.value })} }
+            modifier='material'
+            placeholder='Username'/>
+          </Row>
+          <Row>
+            <Input
+            className="user-input"
+            type='email'
+            value={email} float
+            onChange={(e) => { this.setState({ email: e.target.value })} }
+            modifier='material'
+            placeholder='Email'/> 
+            </Row>
+            <Row>
+            <Input
+            className="user-input"
+            type='password'
+            value={passWord} float
+            onChange={(e) => { this.setState({ passWord: e.target.value })} }
+            modifier='material'
+            placeholder='Password'/>
+            </Row>
+            <Button className="onsen-button" onClick={this.handleRegister}>Register!</Button>
+          </Col>                
     </Page>
       );
     }

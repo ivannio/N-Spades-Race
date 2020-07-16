@@ -12,5 +12,6 @@ namespace NSpadesRace.Models
         public DateTime AcctCreated { get; set; }
         public bool AcctActive { get; set; }
         public string FireBaseUid { get; set; }
+        public string Email { get; set; }
     }
 }

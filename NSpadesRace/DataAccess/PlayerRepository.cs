@@ -43,9 +43,9 @@ namespace NSpadesRace.DataAccess
 
         public Player Add(Player player)
         {
-            var sql = @"insert into player(username, acctCreated, firebaseUid)
+            var sql = @"insert into player(username, acctCreated, firebaseUid, email)
                         output inserted.*
-                        values(@UserName, getDate(), @FirebaseUid )";
+                        values(@UserName, getDate(), @FirebaseUid, @Email)";
 
             using (var db = new SqlConnection(ConnectionString))
             {
