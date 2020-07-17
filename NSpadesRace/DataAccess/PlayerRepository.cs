@@ -41,11 +41,26 @@ namespace NSpadesRace.DataAccess
             }
         }
 
+        public Player GetByFBId(string fireBaseUid)
+        {
+            var query = @"select *
+                          from player
+                          where firebaseUid = @fireBaseUid";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { FireBaseUid = fireBaseUid };
+
+                var player = db.QueryFirstOrDefault<Player>(query, parameters);
+                return player;
+            }
+        }
+
         public Player Add(Player player)
         {
-            var sql = @"insert into player(username, acctCreated, firebaseUid)
+            var sql = @"insert into player(userName, acctCreated, firebaseUid, email)
                         output inserted.*
-                        values(@UserName, getDate(), @FirebaseUid )";
+                        values(@UserName, getDate(), @FirebaseUid, @Email)";
 
             using (var db = new SqlConnection(ConnectionString))
             {
