@@ -22,17 +22,33 @@ const getPlayerById = (id) =>
       .catch((error) => reject(error));
   });
 
-const registerFirebaseUser = (email, password) => {
+  const getPlayerByFirebaseUid = (uid) =>
+  new Promise((resolve, reject) => {
+    axios
+      .get(`${baseUrl}/player/fbid/${uid}`)
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error));
+  });
+
+const registerFirebaseAndDBUser = (email, passWord, userName) => {
   firebase
     .auth()
-    .createUserWithEmailAndPassword(email, password)
+    .createUserWithEmailAndPassword(email, passWord)
     .then((cred) => {
       cred.user.getIdToken().then((token) => {
-        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("token", token)  
+      })
+      .then(() => {
+        const playerToAdd = {
+          userName: userName,
+          email: email,
+          firebaseUid: cred.user.uid,
+        };
+        addNewPlayer(playerToAdd);
       });
     });
 };
 
-const addNewPlayer = (user) => axios.post(`${baseUrl}/player}`, user);
+const addNewPlayer = (user) => axios.post(`${baseUrl}/player`, user);
 
-export default { getPlayerById, addNewPlayer, registerFirebaseUser };
+export default { getPlayerById, addNewPlayer, registerFirebaseAndDBUser, getPlayerByFirebaseUid };

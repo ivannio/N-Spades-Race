@@ -35,7 +35,15 @@ namespace NSpadesRace.Controllers
             return Ok(player);
         }
 
-        [HttpPost]
+        [HttpGet("fbid/{fireBaseUid}")]
+        public IActionResult GetPlayerByFBId(string fireBaseUid)
+        {
+            var player = _repository.GetByFBId(fireBaseUid);
+            if (player == null) return NotFound("No player with that firebase uid could be found.");
+            return Ok(player);
+        }
+
+    [HttpPost]
         public IActionResult AddPlayer(Player playerToAdd)
         {
             var newPlayer = _repository.Add(playerToAdd);
