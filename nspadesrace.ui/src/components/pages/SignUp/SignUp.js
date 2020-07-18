@@ -10,7 +10,6 @@ import {
   Col,
 } from "react-onsenui";
 import playerData from "../../../helpers/data/playerData";
-import firebase from 'firebase/app';
 import "firebase/auth";
 import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
