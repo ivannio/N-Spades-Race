@@ -2,14 +2,13 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
+  Redirect,
   Switch,
 } from 'react-router-dom';
 import TestOne from '../components/pages/TestOne/TestOne';
 import SignUp from '../components/pages/SignUp/SignUp';
-import playerData from '../helpers/data/playerData';
 import './App.scss';
-import { Page, Button } from 'react-onsenui';
+import Home from '../components/pages/Home/Home';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import firebaseConnection from '../helpers/firebaseConnection';
@@ -27,31 +26,22 @@ class App extends React.Component {
       if (user) {
         this.setState({ firebaseUser: user, authed: true });
       } else {
-        this.setState({ authed: false, fireBaseUser: {} });
+        this.setState({ authed: false });
       }
     });
   }
-
-  // getDBUser = (uid) => {
-  //   playerData.getPlayerByFirebaseUid(uid)
-  //   .then((response) => this.setState({ player: response }))
-  //   .catch((error) => console.error('error getting DB userObj', error));
-  // }
 
   render() {
     const { authed, firebaseUser } = this.state;
 
     return(
       <Router>
-        <Page>
-        <p>Home page?</p>
-        <Link to={'/testone'}>
-        <Button>page 1</Button>
-        </Link>
-        </Page>    
-        <Switch>
+        <Route path="/" component={Home}/>            
+        <Switch>        
         <Route path="/testone" exact component={TestOne}/>
-        <Route path="/sign-up" render={() => <SignUp authed={authed} firebaseUser={firebaseUser}></SignUp>}/>
+        <Route path="/sign-up" >
+        { authed ? <Redirect to="/testone" /> : <SignUp authed={authed} firebaseUser={firebaseUser}></SignUp> }
+        </Route>
         </Switch>
       </Router>
     );

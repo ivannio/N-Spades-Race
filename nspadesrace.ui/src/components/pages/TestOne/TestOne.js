@@ -33,9 +33,7 @@ class TestOne extends React.Component {
           <Button onClick={this.handlePress}>get user</Button>
           <Link to={'/sign-up'}><Button>Sign Up</Button></Link>
             <p>UserName: {player.userName}</p>
-            <p>Player Since: {player.acctCreated}</p>
-
-        
+            <p>Player Since: {player.acctCreated}</p>   
     </Page>
       );
     }
