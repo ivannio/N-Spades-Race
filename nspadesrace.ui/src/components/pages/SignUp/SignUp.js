@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   Page,
   AlertDialog,
@@ -54,7 +53,7 @@ class SignUp extends React.Component {
     } = this.state;
 
     return (
-      <Page>
+      <Page> 
         <Col className="sign-up-container">
           <Row className="user-input">
             <Input
