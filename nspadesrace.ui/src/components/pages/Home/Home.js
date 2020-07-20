@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Page, Button, Toolbar, ToolbarButton } from "react-onsenui";
 import "onsenui/css/onsenui.css";
-import "onsenui/css/dark-onsen-css-components.css";
+import "onsenui/css/onsen-css-components.css";
 
 class Home extends React.Component {
   render() {
