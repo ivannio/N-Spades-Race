@@ -1,29 +1,36 @@
 import React from "react";
-import { Page, Tabbar, Tab } from "react-onsenui";
-import SignIn from "../SignIn/SignIn";
-import SignUp from "../SignUp/SignUp";
-import "onsenui/css/ionicons/css/ionicons.css";
+import { Link } from 'react-router-dom';
+import { Page, Tabbar, Tab, Fab, Icon } from "react-onsenui";
+import SignIn from "../../shared/SignIn/SignIn";
+import SignUp from "../../shared/SignUp/SignUp";
+import './SignInSignUp.scss';
+
 
 class SignInSignUp extends React.Component {
 
   renderTabs = () => [
     {
       content: <SignIn />,
-      tab: <Tab label="Log-in" icon="ion-ios-log-in" />,
+      tab: <Tab label="Log-in" icon="fa-sign-in-alt" />,
     },
     {
       content: <SignUp />,
-      tab: <Tab label="Create new account" icon="ion-md-person-add" />,
+      tab: <Tab label="Create new account" icon="fa-user-plus" />,
     },
   ];
 
   render() {
     return (
-      <Page>
+      <Page>        
         <Tabbar
           position="top"
           renderTabs={this.renderTabs}
-        />
+        /><Link to={'/'}>
+        <Fab className='home-fab' position='bottom right' modifier='mini'>
+       <Icon icon='fa-home' className='fab-icon' />
+     </Fab>
+        </Link>
+        <h5 className='home-fab-label'>Home</h5>        
       </Page>
     );
   }

@@ -1,16 +1,56 @@
-.sign-up-container {
-    padding: 3em;
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+
+.header-column {
+    display: flex;
+    flex-direction: column;
+    height: 30%;
+    padding: 3em 3em 1em;
+    justify-content: center;
 }
 
-.user-input {
+.auth-header {
+    font-family: 'Press Start 2P', cursive !important;
+    font-size: 40px !important;
+    text-align: center;
+    color: #0072B8;
+}
+
+.auth-column {
+    height: 70%;
+    padding: 0em 3em 3em;
+}
+
+.auth-row {
     padding: 1.5em;
     margin-left: auto;
     margin-right: auto;
 }
 
-.register-button {
+.custom-button {
     text-align: center;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    color: black !important;
+    font-weight: bold;
+}
+
+.home-fab {
+    background-color: #E9C46A !important;
+}
+
+.fab-icon {
+    color: black !important;
+}
+
+.home-fab-label {
+    color: #E9C46A;
+    font-size: 1em;
+    top: auto;
+    bottom: 20px;
+    right: 70px;
+    left: auto;
+    position: absolute;
+    z-index: 2;
 }

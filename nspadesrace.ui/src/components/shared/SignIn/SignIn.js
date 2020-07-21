@@ -12,7 +12,6 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
-import "./SignIn.scss";
 
 class SignIn extends React.Component {
   state = {
@@ -45,8 +44,14 @@ class SignIn extends React.Component {
 
     return (
       <Page>
-        <Col className="sign-up-container">
-          <Row className="user-input">
+        <Col className="header-column">
+        <h1 className="auth-header">
+              Login
+            </h1>
+          </Col>    
+        <Col className="auth-column">
+        
+          <Row className="auth-row">
             <Input
               style={{ "margin-left": "auto", "margin-right": "auto" }}
               type="email"
@@ -60,7 +65,7 @@ class SignIn extends React.Component {
               placeholder="Email"
             />
           </Row>
-          <Row className="user-input">
+          <Row className="auth-row">
             <Input
               style={{ "margin-left": "auto", "margin-right": "auto" }}
               type="password"
@@ -74,9 +79,9 @@ class SignIn extends React.Component {
               placeholder="Password"
             />
           </Row>
-          <Row className="user-input">
+          <Row className="auth-row">
             <Button
-              className="onsen-button register-button"
+              className="onsen-button custom-button"
               onClick={this.handleLogin}
             >
               Login
