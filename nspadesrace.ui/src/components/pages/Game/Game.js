@@ -1,5 +1,5 @@
 import React from "react";
-import { Page, Toast, Button } from "react-onsenui";
+import { Page } from "react-onsenui";
 import playerData from "../../../helpers/data/playerData.js";
 import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
