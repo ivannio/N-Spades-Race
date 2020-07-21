@@ -1,5 +1,7 @@
 import React from "react";
-import { Page } from "react-onsenui";
+import { Page, Col, Row } from "react-onsenui";
+import getCards from '../../../helpers/data/getCards';
+import Card from '../../shared/Card/Card';
 import playerData from "../../../helpers/data/playerData.js";
 import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
@@ -10,6 +12,12 @@ class Game extends React.Component {
     toastOpen: false,
     player: {},
     loading: false,
+    rowOne: [],
+    rowTwo : [],
+    rowThree: [],
+    rowFour: [],
+    rowFive: [],
+    rowSix: [],
   };
 
   getPlayer = (uid) => {
@@ -18,11 +26,24 @@ class Game extends React.Component {
     .catch((error) => console.error("error getting user", error))
   }
 
-  componentDidMount() {
-    
+  getCards = () => {
+    const cards = getCards.getCards();
+    this.setState({ 
+      rowOne: cards.rowOne,
+      rowTwo : cards.rowTwo,
+      rowThree: cards.rowThree,
+      rowFour: cards.rowFour,
+      rowFive: cards.rowFive,
+      rowSix: cards.rowSix,
+     });
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidMount() {
+    this.getPlayer(this.props.firebaseUid);
+    this.getCards();    
+  }
+
+  componentDidUpdate(prevProps, prevState) {
    if (this.props.firebaseUid !== prevProps.firebaseUid) {
      this.getPlayer(this.props.firebaseUid)
    }
@@ -33,10 +54,24 @@ class Game extends React.Component {
   };
 
   render() {
+    const { rowOne, rowTwo, rowThree, rowFour, rowFive, rowSix } = this.state;
     
     return (
       <Page>
-            
+        <Col className="time-column">
+        <h1>TIME GOES HERE PLACEHOLDER</h1>
+        </Col>
+        <Col className='card-container'>
+          <Row className="card-row">{ rowOne.map((card) => <Card key={card.id} card={card}></Card>)}</Row>
+          <Row className="card-row">{ rowTwo.map((card) => <Card key={card.id} card={card}></Card>)}</Row>
+          <Row className="card-row">{ rowThree.map((card) => <Card key={card.id} card={card}></Card>)}</Row>
+          <Row className="card-row">{ rowFour.map((card) => <Card key={card.id} card={card}></Card>)}</Row>
+          <Row className="card-row">{ rowFive.map((card) => <Card key={card.id} card={card}></Card>)}</Row>
+          <Row className="card-row">{ rowSix.map((card) => <Card key={card.id} card={card}></Card>)}</Row>          
+        </Col>
+        <Col className='bottom-column'>
+        <h1>Probably buttons</h1>
+        </Col>        
       </Page>
     );
   }

@@ -1,3 +1,24 @@
-.toast--material__message {
-    opacity: 1 !important;
+.time-column {
+    display: flex;
+    flex-direction: column;
+    height: 10%;
+    justify-content: center;
 }
+
+.card-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 80%;
+}
+
+.card-row {
+    height: 16.6%;
+    display: flex;
+    justify-content: center;
+}
+
+.bottom-column {
+    height: 10%;
+}
+
