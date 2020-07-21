@@ -1,0 +1,71 @@
+.home-header-column {
+    display: flex;
+    flex-direction: column;
+    height: 40%;
+    padding: 2em 2em 1em;
+    justify-content: center;
+}
+
+.home-row {
+    padding: 1.5em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.home-header {
+    font-family: 'Press Start 2P', cursive !important;
+    font-size: 40px !important;
+    text-align: center;
+    color: #0072B8;
+}
+
+.home-buttons-column {
+    height: 60%;
+    padding: 0em 3em 3em;
+}
+
+.or {
+    padding: 0em 1.5em 0;
+    margin: -0.5em 0em -0.5em;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+.or::before, .or::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgb(255, 255, 255);
+}
+.or::before {
+    margin-right: .25em;
+}
+.or::after {
+    margin-left: .25em;
+}
+
+.custom-button {
+    text-align: center;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    color: black !important;
+    font-weight: bold;
+}
+
+.logout-fab {
+    background-color: #E9C46A !important;
+}
+
+.logout-fab-icon {
+    color: black !important;
+}
+
+.logout-fab-label {
+    color: #E9C46A;
+    font-size: 1em;
+    top: 21px;
+    bottom: auto;
+    right: 70px;
+    left: auto;
+    position: absolute;
+}

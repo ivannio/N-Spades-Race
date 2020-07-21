@@ -5,7 +5,7 @@ import {
   Redirect,
   Switch,
 } from "react-router-dom";
-import TestOne from "../components/pages/TestOne/TestOne";
+import Game from "../components/pages/Game/Game";
 import SignInSignUp from "../components/pages/SignInSignUp/SignInSignUp";
 import "./App.scss";
 import Home from "../components/pages/Home/Home";
@@ -19,15 +19,15 @@ firebaseConnection.firebaseInit();
 class App extends React.Component {
   state = {
     authed: false,
-    firebaseUser: {},
+    firebaseUid: '',
   };
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setState({ firebaseUser: user, authed: true });
+        this.setState({ firebaseUid: user.uid, authed: true });
       } else {
-        this.setState({ authed: false, firebaseUser: {} });
+        this.setState({ authed: false, firebaseUid: '' });
       }
     });
   }
@@ -37,7 +37,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { authed, firebaseUser } = this.state;
+    const { authed, firebaseUid } = this.state;
 
     return (
       <Router>
@@ -45,12 +45,12 @@ class App extends React.Component {
           <Route path="/" exact render={() => (
           <Home authed={authed} logOutUser={this.logOutUser} />
            )} />
-          <Route path="/testone" render={() => (
-          <TestOne authed={authed} logOutUser={this.logOutUser} firebaseUser={firebaseUser} />
+          <Route path="/game" render={() => (
+          <Game authed={authed} logOutUser={this.logOutUser} firebaseUid={firebaseUid} />
            )} />
           <Route path="/sign-up">
             {authed ? (
-              <Redirect to="/" logOutUser={this.logOutUser} firebaseUser={firebaseUser}/>
+              <Redirect to="/" logOutUser={this.logOutUser} firebaseUid={firebaseUid}/>
             ) : (
               <SignInSignUp authed={authed}></SignInSignUp>
             )}
