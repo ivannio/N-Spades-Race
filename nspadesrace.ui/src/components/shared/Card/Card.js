@@ -1,29 +1,70 @@
-import React from 'react';
-import ReactCardFlip from 'react-card-flip';
-import './Card.scss';
+import React from "react";
+import ReactCardFlip from "react-card-flip";
+import "./Card.scss";
 
 class Card extends React.Component {
-    state = {
-        isFlipped: false,
+  state = {
+    isFlipped: false,
+  };
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.nonMatches !== prevProps.nonMatches) {
+            if (this.props.card.id === this.props.nonMatches[0].id || this.props.card.id === this.props.nonMatches[1].id ) {
+                this.concealValue();
+            }
+        }
     }
 
-    handleClick = (e) => {
-        e.preventDefault();
-        this.setState((prevState) => ({ isFlipped: !prevState.isFlipped}));
-    }
+  revealValue = () => {
+    this.setState({ isFlipped: true });
+  };
 
-    render() {
-        const { isFlipped } = this.state;
-        const { card } = this.props;
-        return (<div className='card-flipper'>
-            <ReactCardFlip isFlipped={isFlipped}>
-                <img className="game-card-img" src="https://raw.githubusercontent.com/ivannio/N-Spades-Race/game-setup/nspadesrace.ui/src/assets/images/cards/back.jpeg" alt="card back" onClick={this.handleClick} ></img>
-                <img className="game-card-img" src={`https://raw.githubusercontent.com/ivannio/N-Spades-Race/game-setup/nspadesrace.ui/src/assets/images/cards/${card.value}.jpeg`} alt="card front" onClick={this.handleClick} ></img>
-            </ReactCardFlip>
-        </div>
-            
-        );
-    }
+  concealValue = () => {
+    this.setState({ isFlipped: false });
+  };
+  
+
+  handleClick = (e) => {
+    e.preventDefault();
+    this.revealValue();
+    setTimeout(
+        () => { const { card, selectedCard } = this.props;
+        if (selectedCard.value === 'first') {
+            this.props.setSelectedCard(card);
+            this.props.startTimer();   
+        } else if (selectedCard.value === 'cleared') {
+            this.props.setSelectedCard(card);
+        } else if (selectedCard.value === card.value) {
+            this.props.handleMatch(selectedCard, card)
+        } else {
+            this.props.handleNoMatch(selectedCard, card);
+        }}, 
+        600
+      );     
+  };
+
+  render() {
+    const { isFlipped } = this.state;
+    const { card } = this.props;
+    return (
+      <ReactCardFlip isFlipped={isFlipped}>
+        <div
+          className="game-card-img"
+          onClick={this.handleClick}
+          style={{
+            backgroundImage:
+              "url(https://raw.githubusercontent.com/ivannio/N-Spades-Race/game-setup/nspadesrace.ui/src/assets/images/cards/back.jpeg)",
+          }}
+        ></div>
+        <div
+          className="game-card-img"
+          style={{
+            backgroundImage: `url(https://raw.githubusercontent.com/ivannio/N-Spades-Race/game-setup/nspadesrace.ui/src/assets/images/cards/${card.value}.jpeg)`,
+          }}
+        ></div>
+      </ReactCardFlip>
+    );
+  }
 }
 
 export default Card;
