@@ -1,0 +1,20 @@
+.react-card-flip {
+    max-height: 100%; 
+    max-width: 725px;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    flex: 1 1 auto;   
+}
+
+.game-card-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: 0.2em;
+}
