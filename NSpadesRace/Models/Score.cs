@@ -10,6 +10,7 @@ namespace NSpadesRace.Models
         public int Id { get; set; }
         public int PlayerId { get; set; }
         public string Time { get; set; }
+        public int Raw { get; set; }
         public DateTime DateRecorded { get; set; }
     }  
 }

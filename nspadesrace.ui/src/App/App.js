@@ -26,6 +26,9 @@ class App extends React.Component {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({ firebaseUid: user.uid, authed: true });
+        user.getIdToken().then((token) => {
+          sessionStorage.setItem("token", token);
+        });
       } else {
         this.setState({ authed: false, firebaseUid: '' });
       }

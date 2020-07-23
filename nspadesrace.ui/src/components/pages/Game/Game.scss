@@ -2,7 +2,7 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    height: 14%;
+    height: 13%;
     justify-content: center;
 }
 
@@ -12,9 +12,56 @@
     height: 12%;    
 }
 
-.bottom-column {
+.game-bar {
+    padding: 0.4em;
+    display: flex;
+    flex-direction: row;
+    height: 13%;
+    justify-content: space-evenly;
+}
+
+.custom-button {
+    width: 100%;
+    margin: 0.2em;
+    color: black !important;
+    font-weight: bold;
+}
+
+.logged-out {
+    color: #F93943 !important; 
+}
+
+.logged-in {
+    color: #56876D !important; 
+}
+
+.time {
+    font-size: 4em;
+}
+
+.reset-button {
+    background-color: #F93943;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+}
+
+.icon-auth-container {
     display: flex;
     flex-direction: column;
-    height: 14%;
+}
+
+.game-bar-left {
+    margin-top: auto;
+    display: inline-block;
+}
+
+.game-bar-right {
+    margin-left: 1em;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     justify-content: center;
+    width: 100%;
 }

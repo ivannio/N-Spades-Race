@@ -26,12 +26,26 @@ namespace NSpadesRace.Controllers
             return Ok(allScores);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetScoreById(int id)
+        [HttpGet("{playerId}/highest")]
+        public IActionResult GetHighestByPlayer(int playerId)
         {
-            var score = _repository.GetById(id);
-            if (score == null) return NotFound("No score with that id could be found.");
-            return Ok(score);
+            var highestScore = _repository.GetHighestByPlayerId(playerId);
+            if (highestScore == null)
+            {
+                return NotFound("No scores for this user yet");
+            }
+            return Ok(highestScore);
+        }
+
+        [HttpGet("{playerId}")]
+        public IActionResult GetHighScorseByPlayerId(int playerId)
+        {
+            var scores = _repository.GetByPlayerId(playerId);
+            if (scores == null) 
+            {
+                return NotFound("No scores for this user yet");
+            } 
+            return Ok(scores);
         }
 
         [HttpPost]
