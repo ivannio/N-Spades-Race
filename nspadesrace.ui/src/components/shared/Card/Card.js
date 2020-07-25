@@ -7,12 +7,18 @@ class Card extends React.Component {
     isFlipped: false,
   };
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.props.nonMatches !== prevProps.nonMatches) {
-            if (this.props.card.id === this.props.nonMatches[0].id || this.props.card.id === this.props.nonMatches[1].id ) {
+    componentDidUpdate(prevProps, prevState) { 
+         if (this.props.nonMatches !== prevProps.nonMatches) {
+          if (this.props.card.id === this.props.nonMatches[0].id || this.props.card.id === this.props.nonMatches[1].id ) {
+            setTimeout(
+              () => {
                 this.concealValue();
-            }
-        }
+                console.log("triggered nonmatch");
+              }, 
+              400
+            );
+          }
+      } 
     }
 
   revealValue = () => {
@@ -21,14 +27,12 @@ class Card extends React.Component {
 
   concealValue = () => {
     this.setState({ isFlipped: false });
-  };
-  
+  };  
 
   handleClick = (e) => {
     e.preventDefault();
     this.revealValue();
-    setTimeout(
-        () => { const { card, selectedCard } = this.props;
+     const { card, selectedCard } = this.props;
         if (selectedCard.value === 'first') {
             this.props.setSelectedCard(card);
             this.props.startTimer();   
@@ -38,16 +42,14 @@ class Card extends React.Component {
             this.props.handleMatch(selectedCard, card)
         } else {
             this.props.handleNoMatch(selectedCard, card);
-        }}, 
-        600
-      );     
-  };
+        }     
+  };  
 
   render() {
     const { isFlipped } = this.state;
     const { card } = this.props;
     return (
-      <ReactCardFlip isFlipped={isFlipped}>
+      <ReactCardFlip flipSpeedBackToFront={0.3} flipSpeedFrontToBack={0.3} isFlipped={isFlipped}>
         <div
           className="game-card-img"
           onClick={this.handleClick}

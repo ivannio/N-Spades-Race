@@ -5,6 +5,7 @@ import {
   Redirect,
   Switch,
 } from "react-router-dom";
+import playerData from "../helpers/data/playerData";
 import Game from "../components/pages/Game/Game";
 import SignInSignUp from "../components/pages/SignInSignUp/SignInSignUp";
 import "./App.scss";
@@ -19,38 +20,58 @@ firebaseConnection.firebaseInit();
 class App extends React.Component {
   state = {
     authed: false,
-    firebaseUid: '',
+    firebaseUser: {},
+    player: {},
   };
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setState({ firebaseUid: user.uid, authed: true });
+        this.setState({ firebaseUser: user, authed: true });
+        user.getIdToken().then((token) => {
+          sessionStorage.setItem("token", token);
+        });
+        this.getPlayer(this.state.firebaseUser.uid)
       } else {
-        this.setState({ authed: false, firebaseUid: '' });
+        this.setState({ authed: false, player: {}, firebaseUser: {} });
       }
     });
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.firebaseUser !== prevState.firebaseUser) {
+      if (this.state.firebaseUser.uid !== undefined) {
+        this.getPlayer(this.state.firebaseUser.uid);
+      }
+    }
+  }
+
+  getPlayer = (uid) => {
+    playerData
+      .getPlayerByFirebaseUid(uid)
+      .then((response) => this.setState({ player: response }))
+      .catch((error) => console.error("error getting user", error));
+  };
 
   logOutUser = () => {
     authData.logOut();
   }
 
   render() {
-    const { authed, firebaseUid } = this.state;
+    const { authed, player } = this.state;
 
     return (
       <Router>
         <Switch>          
           <Route path="/" exact render={() => (
-          <Home authed={authed} logOutUser={this.logOutUser} />
+          <Home authed={authed} logOutUser={this.logOutUser} player={player} />
            )} />
           <Route path="/game" render={() => (
-          <Game authed={authed} logOutUser={this.logOutUser} firebaseUid={firebaseUid} />
+          <Game authed={authed} logOutUser={this.logOutUser} player={player}/>
            )} />
           <Route path="/sign-up">
             {authed ? (
-              <Redirect to="/" logOutUser={this.logOutUser} firebaseUid={firebaseUid}/>
+              <Redirect to="/" logOutUser={this.logOutUser} player={player}/>
             ) : (
               <SignInSignUp authed={authed}></SignInSignUp>
             )}

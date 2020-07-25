@@ -26,15 +26,31 @@ namespace NSpadesRace.DataAccess
             }
         }
 
-        public Score GetById(int id)
+        public IEnumerable<Score> GetByPlayerId(int playerId)
         {
             var query = @"select *
                           from score
-                          where id = @id";
+                          where playerId = @playerId
+                          order by raw asc";
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                var parameters = new { Id = id };
+                var parameters = new { PlayerId = playerId };
+
+                var scores = db.Query<Score>(query, parameters);
+                return scores;
+            }
+        }
+
+        public Score GetHighestByPlayerId(int playerId)
+        {
+            var query = @"select top(1) *
+                          from score where playerId = @playerId
+                          order by raw asc";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { PlayerId = playerId };
 
                 var score = db.QueryFirstOrDefault<Score>(query, parameters);
                 return score;
@@ -43,9 +59,9 @@ namespace NSpadesRace.DataAccess
 
         public Score Add(Score score)
         {
-            var sql = @"insert into score(PlayerId,Time,DateRecorded)
+            var sql = @"insert into score(PlayerId,Time,Raw,DateRecorded)
                         output inserted.*
-                        values(@PlayerId, @Time, getDate())";
+                        values(@PlayerId, @Time, @Raw, getDate())";
 
             using (var db = new SqlConnection(ConnectionString))
             {
