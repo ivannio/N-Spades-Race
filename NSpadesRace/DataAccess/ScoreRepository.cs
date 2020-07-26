@@ -22,7 +22,7 @@ namespace NSpadesRace.DataAccess
         {
             using (var db = new SqlConnection(ConnectionString))
             {
-                return db.Query<Score>("select * from score");
+                return db.Query<Score>("select * from score order by raw asc");
             }
         }
 
