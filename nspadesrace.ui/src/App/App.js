@@ -20,8 +20,8 @@ firebaseConnection.firebaseInit();
 class App extends React.Component {
   state = {
     authed: false,
-    firebaseUser: {},
-    player: {},
+    firebaseUser: null,
+    player: null,
   };
 
   componentDidMount() {
@@ -33,17 +33,9 @@ class App extends React.Component {
         });
         this.getPlayer(this.state.firebaseUser.uid)
       } else {
-        this.setState({ authed: false, player: {}, firebaseUser: {} });
+        this.setState({ authed: false, player: null, firebaseUser: null });
       }
     });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.firebaseUser !== prevState.firebaseUser) {
-      if (this.state.firebaseUser.uid !== undefined) {
-        this.getPlayer(this.state.firebaseUser.uid);
-      }
-    }
   }
 
   getPlayer = (uid) => {
@@ -55,12 +47,13 @@ class App extends React.Component {
 
   logOutUser = () => {
     authData.logOut();
-  }
+  };
 
   render() {
     const { authed, player } = this.state;
 
     return (
+      authed && player === null ? <></> :
       <Router>
         <Switch>          
           <Route path="/" exact render={() => (
@@ -80,6 +73,6 @@ class App extends React.Component {
       </Router>
     );
   }
-}
+};
 
 export default App;

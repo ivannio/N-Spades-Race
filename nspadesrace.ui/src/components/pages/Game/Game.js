@@ -211,6 +211,7 @@ class Game extends React.Component {
     let minutes = ("0" + (Math.floor(timerTime / 60000) % 60)).slice(-2);
 
     return (
+      authed && player === null ? <></> :
       <Page>
         <Col className="time-column">
           <div className="time">
