@@ -351,7 +351,7 @@ class Game extends React.Component {
                   size={30}
                   icon="fa-check-circle"
                 ></Icon>
-                logged in as: <b>{player.userName}</b>
+                logged in as<div className="player-username">{player.userName}</div>
               </div>
             </div>
           ) : (

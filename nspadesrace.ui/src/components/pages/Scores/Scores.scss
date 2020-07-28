@@ -1,0 +1,52 @@
+.leaderboard-list {
+    background-color:rgba(0, 0, 0, 0);
+}
+
+.leaderboard-row {
+    margin-right: -2em;
+    margin-left: 3em;
+    padding: 1em 1em 1em 0em;
+    border-bottom: 1px solid #A3CEF1; 
+}
+
+.leaderboard-title {
+    padding: 0.6em;
+    font-size: 1.6em;
+    text-align: center;
+    font-family: 'Rowdies', cursive;
+}
+
+.leaderboard-legend {
+    margin-right: 1em;
+    margin-left: 1em;
+    padding: 1em;
+    border-bottom: 1px solid rgba(17, 59, 94, 0.61); 
+    display: flex;
+    font-weight: bold;
+}
+
+.score-time {
+    margin-left: 3em;
+}
+
+.score-rank {
+    min-width: 6em;
+}
+
+.score-player {
+    width: 8em;
+}
+
+.score-rank-legend {
+    margin-right: auto;
+}
+
+.score-time-legend {
+    margin-left: auto;
+}
+
+
+
+
+
+

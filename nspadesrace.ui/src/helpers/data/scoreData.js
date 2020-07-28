@@ -1,6 +1,14 @@
 import axios from 'axios';
 import { baseUrl } from "../constants.json";
 
+const getLeaderboard = () =>
+  new Promise((resolve, reject) => {
+    axios
+      .get(`${baseUrl}/score`)
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error));
+  });
+
 const getHighestScoreByPlayerId = (id) =>
   new Promise((resolve, reject) => {
     axios
@@ -24,4 +32,4 @@ const getHighestScoreByPlayerId = (id) =>
       .catch((error) => reject(error));
   }); 
 
-export default { getHighestScoreByPlayerId, getHighScoresByPlayerId, addScore };
+export default { getHighestScoreByPlayerId, getHighScoresByPlayerId, addScore, getLeaderboard };

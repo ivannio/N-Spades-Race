@@ -13,7 +13,7 @@ class Home extends React.Component {
       authed && player === null ? <></> :
       <Page>
         <Col className="home-header-column">
-          <h1 className="home-header">N-Spades Race</h1>
+          <h1 className="home-header">N-Mark Spades Race</h1>
         </Col>
         <Col className="home-buttons-column">
           <Row className="home-row">

@@ -1,36 +1,45 @@
 import React from "react";
-import { Link } from 'react-router-dom';
-import { Page, Tabbar, Tab, Fab, Icon } from "react-onsenui";
-import SignIn from "../../shared/SignIn/SignIn";
-import SignUp from "../../shared/SignUp/SignUp";
+import { Page, Tabbar, Tab } from "react-onsenui";
+import scoreData from '../../../helpers/data/scoreData';
+import Leaderboard from "../../shared/Leaderboard/Leaderboard";
+import MyHighScores from "../../shared/MyHighScores/MyHighScores";
 import './Scores.scss';
 
-
 class Scores extends React.Component {
+  state = {
+    leaderboardScores: null,  
+  }
+  
+  componentDidMount() {
+    this.getLeaderboard();
+  }
+
+  getLeaderboard = () => {
+    scoreData.getLeaderboard()
+    .then((response) => this.setState({ leaderboardScores: response }))
+    .catch((error) => console.log("error getting leaderboard", error))
+  };
 
   renderTabs = () => [
     {
-      content: <SignIn />,
-      tab: <Tab label="Log-in" icon="fa-sign-in-alt" />,
+      content: <Leaderboard leaderboardScores={this.state.leaderboardScores} />,
+      tab: <Tab label="Leaderboard" icon="fa-chess-king" />,
     },
     {
-      content: <SignUp />,
-      tab: <Tab label="Create new account" icon="fa-user-plus" />,
+      content: <MyHighScores authed={this.props.authed} player={this.props.player} myHighScores={this.props.myHighScores} />,
+      tab: <Tab label="My High Scores" icon="fa-stopwatch" />,
     },
   ];
 
-  render() {
+  render() { 
+    const { authed, myHighScores } = this.props;
     return (
-      <Page>        
-        <Tabbar
+      <Page>
+        { authed && myHighScores === null ? <></> : <Tabbar
           position="top"
           renderTabs={this.renderTabs}
-        /><Link to={'/'}>
-        <Fab className='home-fab' position='bottom right' modifier='mini'>
-       <Icon icon='fa-home' className='fab-icon' />
-     </Fab>
-        </Link>
-        <h5 className='home-fab-label'>Home</h5>        
+        />    }        
+             
       </Page>
     );
   }
