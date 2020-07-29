@@ -2,21 +2,17 @@ import React from "react";
 import {
   Page,
   List,
-  Row,
 } from "react-onsenui";
 import ParticlesBg from "particles-bg";
 import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
 
 class Leaderboard extends React.Component {
-    state = {
-        loading: false,
-    }    
 
   render() {
     const { leaderboardScores } = this.props;    
     return (    
-      <Page>
+      <Page className="score-page">
           { leaderboardScores === null ? <></> :
           <List modifier="material" className="leaderboard-list">
               <div className="leaderboard-title">Top 10 Scores</div>

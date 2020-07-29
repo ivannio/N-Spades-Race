@@ -6,32 +6,37 @@ import MyHighScores from "../../shared/MyHighScores/MyHighScores";
 import './Scores.scss';
 
 class Scores extends React.Component {
-  componentDidUpdate(prevProps, prevState) {
+
+  componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
-      
+      if (this.props.authed !== prevProps.authed) {
+        if (!this.props.authed) {
+          this.forceUpdate();
+          console.log("uh forced update..?");
+        }
+      }
     }
   }
-
-  renderTabs = () => [
-    {
-      content: <Leaderboard leaderboardScores={this.props.leaderboardScores} />,
-      tab: <Tab label="Leaderboard" icon="fa-chess-king" />,
-    },
-    {
-      content: <MyHighScores authed={this.props.authed} player={this.props.player} myHighScores={this.props.myHighScores} />,
-      tab: <Tab label="My High Scores" icon="fa-stopwatch" />,
-    },
-  ];
-
-  render() { 
-    const { authed, myHighScores } = this.props;
+  render() {
+    const { authed, player, myHighScores, leaderboardScores } = this.props;
+    const renderTabs = () => [
+      {
+        content: <Leaderboard leaderboardScores={leaderboardScores} />,
+        tab: <Tab label="Leaderboard" icon="fa-chess-king" />,
+      },
+      {
+        content: <MyHighScores authed={authed} player={player} myHighScores={myHighScores} />,
+        tab: <Tab label="My High Scores" icon="fa-stopwatch" />,
+      },
+    ];
+    
     return (
+      authed && myHighScores === null ? <></> :
       <Page>
-        { authed && myHighScores === null ? <></> : <Tabbar
+          <Tabbar
           position="top"
           swipeable={true}
-          renderTabs={this.renderTabs}
-        />    }
+          renderTabs={renderTabs}/> 
         <BottomToolbar className="bottom-score-toolbar" modifier="transparent">
         <Link className="home-toolbar-button" to={"/"}>
           <ToolbarButton className="home-toolbar-button"><Icon size={29} icon='fa-home'></Icon></ToolbarButton>              

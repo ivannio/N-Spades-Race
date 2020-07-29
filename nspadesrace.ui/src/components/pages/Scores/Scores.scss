@@ -1,6 +1,6 @@
 .leaderboard-list {
-    background-color:rgba(0, 0, 0, 0);
-    font-weight: bold;
+   font-weight: bold;
+   background-color: #0116279d;
 }
 
 .leaderboard-row {
@@ -65,6 +65,7 @@
 }
 
 .bottom-score-toolbar {
+    margin-bottom: 1em;
     display: flex;
     justify-content: space-around;    
 }

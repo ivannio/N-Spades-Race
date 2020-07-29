@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from 'react-router-dom';
 import {
   Page,
   List,
@@ -16,7 +15,7 @@ class MyHighScores extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.myHighScores !== prevProps.myHighScores) {
       if (this.props.myHighScores !== null) {
-        this.dateFormatted(this.props.myHighScores);
+        this.dateFormatter(this.props.myHighScores);
       }
     } 
   }
@@ -30,6 +29,7 @@ class MyHighScores extends React.Component {
 
   dateFormatter = (scores) => {
     let scoresDateFormatted = [...scores];
+    // eslint-disable-next-line array-callback-return
     scores.map((score, index) => {
       const rawDate = score.dateRecorded;
       let shortDate = rawDate.slice(5, 10).replace("-", "/");
@@ -46,7 +46,7 @@ class MyHighScores extends React.Component {
     const { player } = this.props; 
        
     return (    
-      <Page>
+      <Page className="score-page">
           { scoresDateFormatted !== null ? <List modifier="material" className="leaderboard-list">
               <div className="leaderboard-title">{player.userName}'s top scores</div>
               <div className="personal-score-legend">     

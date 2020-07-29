@@ -5,6 +5,7 @@ import {
   Redirect,
   Switch,
 } from "react-router-dom";
+import authData from '../helpers/data/authData';
 import playerData from "../helpers/data/playerData";
 import scoreData from '../helpers/data/scoreData';
 import Home from "../components/pages/Home/Home";
@@ -14,7 +15,6 @@ import Scores from "../components/pages/Scores/Scores";
 import firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConnection from "../helpers/firebaseConnection";
-import authData from '../helpers/data/authData';
 import "./App.scss";
 
 firebaseConnection.firebaseInit();
@@ -35,7 +35,7 @@ class App extends React.Component {
         user.getIdToken().then((token) => {
           sessionStorage.setItem("token", token);
         });
-        this.getPlayer(this.state.firebaseUser.uid)
+        this.getPlayer(this.state.firebaseUser.uid);
       } else {
         this.setState({ authed: false, player: null, firebaseUser: null, myHighScores: null });
       }
@@ -67,6 +67,7 @@ class App extends React.Component {
   updateAppHighScores = () => {
     this.getPlayerHighScores(this.state.player);
     this.getLeaderboard();
+    console.log("ran the update function");
   }
 
   getPlayerHighScores = (player) => {  
