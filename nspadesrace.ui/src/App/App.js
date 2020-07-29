@@ -6,14 +6,16 @@ import {
   Switch,
 } from "react-router-dom";
 import playerData from "../helpers/data/playerData";
-import Game from "../components/pages/Game/Game";
-import SignInSignUp from "../components/pages/SignInSignUp/SignInSignUp";
-import "./App.scss";
+import scoreData from '../helpers/data/scoreData';
 import Home from "../components/pages/Home/Home";
+import SignInSignUp from "../components/pages/SignInSignUp/SignInSignUp";
+import Game from "../components/pages/Game/Game";
+import Scores from "../components/pages/Scores/Scores";
 import firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConnection from "../helpers/firebaseConnection";
 import authData from '../helpers/data/authData';
+import "./App.scss";
 
 firebaseConnection.firebaseInit();
 
@@ -22,6 +24,8 @@ class App extends React.Component {
     authed: false,
     firebaseUser: null,
     player: null,
+    myHighScores: null,
+    leaderboardScores: null,
   };
 
   componentDidMount() {
@@ -33,9 +37,24 @@ class App extends React.Component {
         });
         this.getPlayer(this.state.firebaseUser.uid)
       } else {
-        this.setState({ authed: false, player: null, firebaseUser: null });
+        this.setState({ authed: false, player: null, firebaseUser: null, myHighScores: null });
       }
     });
+    this.getLeaderboard();
+  }
+
+  getLeaderboard = () => {
+    scoreData.getLeaderboard()
+    .then((response) => this.setState({ leaderboardScores: response }))
+    .catch((error) => console.log("error getting leaderboard", error))
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.player !== prevState.player) {
+      if (this.state.player !== null) {
+        this.getPlayerHighScores(this.state.player);
+      }  
+    }
   }
 
   getPlayer = (uid) => {
@@ -45,25 +64,37 @@ class App extends React.Component {
       .catch((error) => console.error("error getting user", error));
   };
 
+  updateAppHighScores = () => {
+    this.getPlayerHighScores(this.state.player);
+    this.getLeaderboard();
+  }
+
+  getPlayerHighScores = (player) => {  
+    scoreData.getHighScoresByPlayerId(player.id)
+  .then((response) => this.setState({ myHighScores: response }))
+  .catch((error) => console.log("error getting leaderboard", error))      
+  };
+
   logOutUser = () => {
     authData.logOut();
   };
 
   render() {
-    const { authed, player } = this.state;
-
+    const { authed, player, leaderboardScores, myHighScores } = this.state;
     return (
-      authed && player === null ? <></> :
       <Router>
         <Switch>          
           <Route path="/" exact render={() => (
           <Home authed={authed} logOutUser={this.logOutUser} player={player} />
            )} />
           <Route path="/game" render={() => (
-          <Game authed={authed} logOutUser={this.logOutUser} player={player}/>
+          <Game authed={authed} logOutUser={this.logOutUser} player={player} updateAppHighScores={this.updateAppHighScores}/>
+           )} />
+           <Route path="/scores" render={() => (
+          <Scores authed={authed} player={player} logOutUser={this.logOutUser} leaderboardScores={leaderboardScores} myHighScores={myHighScores}/>
            )} />
           <Route path="/sign-up">
-            {authed ? (
+            {authed && player !== null ? (
               <Redirect to="/" logOutUser={this.logOutUser} player={player}/>
             ) : (
               <SignInSignUp authed={authed}></SignInSignUp>

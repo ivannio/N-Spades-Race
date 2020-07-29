@@ -13,29 +13,29 @@ class Home extends React.Component {
       authed && player === null ? <></> :
       <Page>
         <Col className="home-header-column">
-          <h1 className="home-header">N-Spades Race</h1>
+          <h1 className="home-header">N-Mark Spades Race</h1>
         </Col>
         <Col className="home-buttons-column">
           <Row className="home-row">
             <Link className="custom-button" to={"/game"}>
-              <Button className="custom-button">
+              <Button modifier="material" className="custom-button">
                 {authed ? "Play" : "Play Logged Out"}
               </Button>
             </Link>
           </Row>
           { authed ? <Row className="home-row">
             <Link className="custom-button" to={"/scores"}>
-              <Button className="custom-button">View High Scores</Button>
+              <Button modifier="material" className="custom-button">View High Scores</Button>
             </Link>
           </Row> : <><div className="or">or</div>
           <Row className="home-row">
             <Link className="custom-button" to={"/sign-up"}>
-              <Button className="custom-button">Login / Create Account</Button>
+              <Button modifier="material" className="custom-button">Login / Create Account</Button>
             </Link>
           </Row>
           <Row className="home-row">
             <Link className="custom-button" to={"/scores"}>
-              <Button className="custom-button">View High Scores</Button>
+              <Button modifier="material" className="custom-button">View High Scores</Button>
             </Link>
           </Row></>
           }      

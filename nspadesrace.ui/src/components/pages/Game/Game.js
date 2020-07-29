@@ -12,12 +12,12 @@ import {
   BottomToolbar,
   Icon,
 } from "react-onsenui";
+import "onsenui/css/onsenui.css";
+import "onsenui/css/onsen-css-components.css";
 import ParticlesBg from "particles-bg";
 import getCards from "../../../helpers/data/getCards";
 import Card from "../../shared/Card/Card";
 import scoreData from "../../../helpers/data/scoreData.js";
-import "onsenui/css/onsenui.css";
-import "onsenui/css/onsen-css-components.css";
 import "./Game.scss";
 
 class Game extends React.Component {
@@ -129,25 +129,35 @@ class Game extends React.Component {
     this.toaster("Congrats! you won your first game!");
   };
 
+  noAuthWin = (time) => {
+    this.toaster(`You finished in ${time}! Login or create an account to save your next score!`);
+  }
+
+  closeToast = () => {
+    this.setState({ toastOpen: false, toastText: "" });
+  };
+
   toaster = (text) => {
-    this.setState({ toastOpen: true, toastText: text });
+    this.setState({ toastText: text, toastOpen: true });
     setTimeout(() => {
-      this.setState({ toastOpen: false, toastText: "" });
+      this.closeToast();
     }, 4000);
   };
 
   finish = () => {
     this.stopTimer();
     this.setState({ gameFinished: true });
+    const { timerTime } = this.state;
+    const centiseconds = ("0" + (Math.floor(timerTime / 10) % 100)).slice(-2);
+    const seconds = ("0" + (Math.floor(timerTime / 1000) % 60)).slice(-2);
+    const minutes = ("0" + (Math.floor(timerTime / 60000) % 60)).slice(-2); 
+    const formattedTime = `${minutes}:${seconds}:${centiseconds}`; 
     if (this.props.authed) {
-      const { timerTime, highScore } = this.state;
-      let centiseconds = ("0" + (Math.floor(timerTime / 10) % 100)).slice(-2);
-      let seconds = ("0" + (Math.floor(timerTime / 1000) % 60)).slice(-2);
-      let minutes = ("0" + (Math.floor(timerTime / 60000) % 60)).slice(-2);
+      const { highScore } = this.state; 
       const scoreToAdd = {
         playerId: this.props.player.id,
         raw: timerTime,
-        time: `${minutes}:${seconds}:${centiseconds}`,
+        time: formattedTime,
       };
       this.addScore(scoreToAdd);
       if (highScore === null) {
@@ -155,8 +165,8 @@ class Game extends React.Component {
       } else if (highScore.raw > scoreToAdd.raw) {
         this.newHighScore(scoreToAdd);
       }
-      console.log(scoreToAdd);
-    }
+      this.props.updateAppHighScores();
+    } else this.noAuthWin(formattedTime);
   };
 
   openRules = () => {
@@ -196,6 +206,7 @@ class Game extends React.Component {
       matches,
       nonMatches,
       toastOpen,
+      toastText,
       rulesOpen,
       gameFinished,
     } = this.state;
@@ -210,9 +221,13 @@ class Game extends React.Component {
     let seconds = ("0" + (Math.floor(timerTime / 1000) % 60)).slice(-2);
     let minutes = ("0" + (Math.floor(timerTime / 60000) % 60)).slice(-2);
 
-    return (
-      authed && player === null ? <></> :
+    return authed && player === null ? (
+      <></>
+    ) : (
       <Page>
+        { toastOpen ? <Toast isOpen={true}><div className="toast-text">
+            {toastText}
+    </div></Toast> : <></> }
         <Col className="time-column">
           <div className="time">
             {minutes}:{seconds}:{centiseconds}
@@ -336,7 +351,7 @@ class Game extends React.Component {
                   size={30}
                   icon="fa-check-circle"
                 ></Icon>
-                logged in as: <b>{player.userName}</b>
+                logged in as<div className="player-username">{player.userName}</div>
               </div>
             </div>
           ) : (
@@ -378,36 +393,35 @@ class Game extends React.Component {
             )}
           </div>
         </BottomToolbar>
-        { rulesOpen ? <AlertDialog
-          isOpen={true}
-          onCancel={this.closeRules}
-          cancelable
-        >
-          <div className="alert-dialog-title">How To Play</div>
-          <div className="alert-dialog-content">
-            -Tap a card to flip it over and reveal the face value.
-            <br />
-            -Time starts as soon as the first card's face is shown.
-            <br />
-            -Flip over another card. If it is a match, the cards will remain
-            flipped.
-            <br />
-            -If the cards do not match, thy will flip back over.
-            <br />
-            -Try to remember which cards are where, and match them all as fast
-            as possible to win!
-          </div>
-          <div className="alert-dialog-footer">
-            <AlertDialogButton
-              onClick={this.closeRules}
-              className="alert-dialog-button"
-            >
-              OK!
-            </AlertDialogButton>
-          </div>
-        </AlertDialog> : <></> }
-        
-        <Toast isOpen={toastOpen}> {this.state.toastText} </Toast>
+        {rulesOpen ? (
+          <AlertDialog isOpen={true} onCancel={this.closeRules} cancelable>
+            <div className="alert-dialog-title">How To Play</div>
+            <div className="alert-dialog-content">
+              -Tap a card to flip it over and reveal the face value.
+              <br />
+              -Time starts as soon as the first card's face is shown.
+              <br />
+              -Flip over another card. If it is a match, the cards will remain
+              flipped.
+              <br />
+              -If the cards do not match, thy will flip back over.
+              <br />
+              -Try to remember which cards are where, and match them all as fast
+              as possible to win!
+            </div>
+            <div className="alert-dialog-footer">
+              <AlertDialogButton
+                onClick={this.closeRules}
+                className="alert-dialog-button"
+              >
+                OK!
+              </AlertDialogButton>
+            </div>
+          </AlertDialog>
+        ) : (
+          <></>
+        )}
+
         {gameFinished ? <ParticlesBg type="lines" bg={true} /> : <></>}
       </Page>
     );

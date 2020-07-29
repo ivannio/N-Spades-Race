@@ -13,7 +13,6 @@ class Card extends React.Component {
             setTimeout(
               () => {
                 this.concealValue();
-                console.log("triggered nonmatch");
               }, 
               400
             );

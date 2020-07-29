@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using NSpadesRace.Models;
+using NSpadesRace.Models.ViewModels;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 
@@ -18,17 +19,22 @@ namespace NSpadesRace.DataAccess
             ConnectionString = config.GetConnectionString("NSpadesRace");
         }
 
-        public IEnumerable<Score> GetAll()
+        public IEnumerable<LeaderboardEntry> GetLeaderboard()
         {
+            var query = @"select top(10) score.Id, player.userName as PlayerName, [Time], DateRecorded
+                            from score
+                            join player on player.id = score.playerId
+                            order by raw asc";
+
             using (var db = new SqlConnection(ConnectionString))
             {
-                return db.Query<Score>("select * from score order by raw asc");
+                return db.Query<LeaderboardEntry>(query);
             }
         }
 
         public IEnumerable<Score> GetByPlayerId(int playerId)
         {
-            var query = @"select *
+            var query = @"select top(10) *
                           from score
                           where playerId = @playerId
                           order by raw asc";

@@ -117,6 +117,7 @@ class SignUp extends React.Component {
           </Row>
           <Row className="auth-row">
           <Button
+            modifier="material"
             className="onsen-button custom-button"
             onClick={this.handleRegister}
           >

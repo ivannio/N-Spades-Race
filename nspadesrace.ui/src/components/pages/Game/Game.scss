@@ -36,6 +36,7 @@
 }
 
 .time {
+    color: #c0d6df;
     font-size: 4em;
 }
 
@@ -50,6 +51,13 @@
 .icon-auth-container {
     display: flex;
     flex-direction: column;
+    max-width: 222px;
+}
+
+.player-username {
+    font-weight: bold;
+    flex-shrink: 2;
+    color: #c0d6df;    
 }
 
 .loading-toolbar {

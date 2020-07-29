@@ -24,6 +24,7 @@ class SignInSignUp extends React.Component {
       <Page>        
         <Tabbar
           position="top"
+          swipeable={true}
           renderTabs={this.renderTabs}
         /><Link to={'/'}>
         <Fab className='home-fab' position='bottom right' modifier='mini'>

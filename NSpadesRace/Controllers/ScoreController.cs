@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NSpadesRace.DataAccess;
 using NSpadesRace.Models;
+using NSpadesRace.Models.ViewModels;
 
 namespace NSpadesRace.Controllers
 {
@@ -20,9 +21,9 @@ namespace NSpadesRace.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllScores()
+        public IActionResult GetTopScores()
         {
-            var allScores = _repository.GetAll();
+            var allScores = _repository.GetLeaderboard();
             return Ok(allScores);
         }
 

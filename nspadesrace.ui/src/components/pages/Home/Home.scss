@@ -13,10 +13,10 @@
 }
 
 .home-header {
-    font-family: 'Press Start 2P', cursive !important;
-    font-size: 40px !important;
+    font-family: 'Rowdies', cursive !important;
+    font-size: 55px !important;
     text-align: center;
-    color: #0072B8;
+    color: #c7ccdb;
 }
 
 .home-buttons-column {
@@ -34,7 +34,7 @@
 .or::before, .or::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid rgb(255, 255, 255);
+    border-bottom: 1px solid #c7ccdb;
 }
 .or::before {
     margin-right: .25em;
@@ -53,7 +53,7 @@
 }
 
 .logout-fab {
-    background-color: #E9C46A !important;
+    background-color: #6290c8 !important;
 }
 
 .logout-fab-icon {
@@ -61,7 +61,7 @@
 }
 
 .logout-fab-label {
-    color: #E9C46A;
+    color: #c7ccdb;
     font-size: 1em;
     top: 21px;
     bottom: auto;

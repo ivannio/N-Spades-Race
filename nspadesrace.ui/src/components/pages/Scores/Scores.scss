@@ -1,0 +1,77 @@
+.leaderboard-list {
+    background-color:rgba(0, 0, 0, 0);
+    font-weight: bold;
+}
+
+.leaderboard-row {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 2em;
+    padding: 0.8em 1em 0.8em 0em;
+    border-bottom: 1px solid #a3cef1d2; 
+}
+
+.personal-score-legend {
+    margin-right: 1em;
+    margin-left: 1em;
+    padding: 1em 1em 0.6em;
+    border-bottom: 1px solid #E9C46A;
+    display: flex;
+    justify-content: space-around;
+}
+
+.personal-score-row {
+    display: flex;
+    justify-content: space-around;
+    margin-right: 2em;
+    padding: 0.8em 0em;
+    border-bottom: 1px solid #a3cef1d2; 
+}
+
+.leaderboard-title {
+    padding: 1em 1em 0.3em;
+    font-size: 2em;
+    text-align: center;
+    font-family: 'Rowdies', cursive;
+}
+
+.leaderboard-legend {
+    margin-right: 1em;
+    margin-left: 1em;
+    padding: 1em 1em 0.6em;
+    border-bottom: 1px solid #E9C46A;
+    display: flex;
+    justify-content: space-between;
+}
+
+.personal-score-container {
+    display: flex;
+}
+
+.score-index {
+    display: flex;
+    min-width: 25px;
+    justify-content: flex-end; 
+}
+
+.score-player {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.score-time {
+    margin-left: 0.5em;
+    display: flex;  
+}
+
+.bottom-score-toolbar {
+    display: flex;
+    justify-content: space-around;    
+}
+
+.home-toolbar-button { 
+    text-decoration: none;    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
