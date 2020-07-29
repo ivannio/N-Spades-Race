@@ -25,6 +25,7 @@ class App extends React.Component {
     firebaseUser: null,
     player: null,
     myHighScores: null,
+    leaderboardScores: null,
   };
 
   componentDidMount() {
@@ -39,11 +40,20 @@ class App extends React.Component {
         this.setState({ authed: false, player: null, firebaseUser: null, myHighScores: null });
       }
     });
+    this.getLeaderboard();
   }
+
+  getLeaderboard = () => {
+    scoreData.getLeaderboard()
+    .then((response) => this.setState({ leaderboardScores: response }))
+    .catch((error) => console.log("error getting leaderboard", error))
+  };
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.player !== prevState.player) {
-      this.getPlayerHighScores(this.state.player);
+      if (this.state.player !== null) {
+        this.getPlayerHighScores(this.state.player);
+      }  
     }
   }
 
@@ -53,6 +63,11 @@ class App extends React.Component {
       .then((response) => this.setState({ player: response }))
       .catch((error) => console.error("error getting user", error));
   };
+
+  updateAppHighScores = () => {
+    this.getPlayerHighScores(this.state.player);
+    this.getLeaderboard();
+  }
 
   getPlayerHighScores = (player) => {  
     scoreData.getHighScoresByPlayerId(player.id)
@@ -65,23 +80,21 @@ class App extends React.Component {
   };
 
   render() {
-    const { authed, player, myHighScores } = this.state;
-
+    const { authed, player, leaderboardScores, myHighScores } = this.state;
     return (
-      authed && player === null ? <></> :
       <Router>
         <Switch>          
           <Route path="/" exact render={() => (
           <Home authed={authed} logOutUser={this.logOutUser} player={player} />
            )} />
           <Route path="/game" render={() => (
-          <Game authed={authed} logOutUser={this.logOutUser} player={player}/>
+          <Game authed={authed} logOutUser={this.logOutUser} player={player} updateAppHighScores={this.updateAppHighScores}/>
            )} />
            <Route path="/scores" render={() => (
-          <Scores authed={authed} player={player} myHighScores={myHighScores}/>
+          <Scores authed={authed} player={player} logOutUser={this.logOutUser} leaderboardScores={leaderboardScores} myHighScores={myHighScores}/>
            )} />
           <Route path="/sign-up">
-            {authed ? (
+            {authed && player !== null ? (
               <Redirect to="/" logOutUser={this.logOutUser} player={player}/>
             ) : (
               <SignInSignUp authed={authed}></SignInSignUp>

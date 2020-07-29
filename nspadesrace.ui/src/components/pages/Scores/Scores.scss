@@ -1,17 +1,36 @@
 .leaderboard-list {
     background-color:rgba(0, 0, 0, 0);
+    font-weight: bold;
 }
 
 .leaderboard-row {
-    margin-right: -2em;
-    margin-left: 3em;
-    padding: 1em 1em 1em 0em;
-    border-bottom: 1px solid #A3CEF1; 
+    display: flex;
+    justify-content: space-between;
+    margin-left: 2em;
+    padding: 0.8em 1em 0.8em 0em;
+    border-bottom: 1px solid #a3cef1d2; 
+}
+
+.personal-score-legend {
+    margin-right: 1em;
+    margin-left: 1em;
+    padding: 1em 1em 0.6em;
+    border-bottom: 1px solid #E9C46A;
+    display: flex;
+    justify-content: space-around;
+}
+
+.personal-score-row {
+    display: flex;
+    justify-content: space-around;
+    margin-right: 2em;
+    padding: 0.8em 0em;
+    border-bottom: 1px solid #a3cef1d2; 
 }
 
 .leaderboard-title {
-    padding: 0.6em;
-    font-size: 1.6em;
+    padding: 1em 1em 0.3em;
+    font-size: 2em;
     text-align: center;
     font-family: 'Rowdies', cursive;
 }
@@ -19,34 +38,40 @@
 .leaderboard-legend {
     margin-right: 1em;
     margin-left: 1em;
-    padding: 1em;
-    border-bottom: 1px solid rgba(17, 59, 94, 0.61); 
+    padding: 1em 1em 0.6em;
+    border-bottom: 1px solid #E9C46A;
     display: flex;
-    font-weight: bold;
+    justify-content: space-between;
 }
 
-.score-time {
-    margin-left: 3em;
+.personal-score-container {
+    display: flex;
 }
 
-.score-rank {
-    min-width: 6em;
+.score-index {
+    display: flex;
+    min-width: 25px;
+    justify-content: flex-end; 
 }
 
 .score-player {
-    width: 8em;
+    display: flex;
+    justify-content: flex-start;
 }
 
-.score-rank-legend {
-    margin-right: auto;
+.score-time {
+    margin-left: 0.5em;
+    display: flex;  
 }
 
-.score-time-legend {
-    margin-left: auto;
+.bottom-score-toolbar {
+    display: flex;
+    justify-content: space-around;    
 }
 
-
-
-
-
-
+.home-toolbar-button { 
+    text-decoration: none;    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

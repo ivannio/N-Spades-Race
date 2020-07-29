@@ -165,7 +165,7 @@ class Game extends React.Component {
       } else if (highScore.raw > scoreToAdd.raw) {
         this.newHighScore(scoreToAdd);
       }
-      console.log(scoreToAdd);
+      this.props.updateAppHighScores();
     } else this.noAuthWin(formattedTime);
   };
 

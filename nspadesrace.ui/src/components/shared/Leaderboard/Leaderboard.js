@@ -19,7 +19,7 @@ class Leaderboard extends React.Component {
       <Page>
           { leaderboardScores === null ? <></> :
           <List modifier="material" className="leaderboard-list">
-              <div className="leaderboard-title">TOP 10 SCORES</div>
+              <div className="leaderboard-title">Top 10 Scores</div>
               <div className="leaderboard-legend">
                 <div className='score-rank-legend'>
                     Rank
@@ -31,8 +31,8 @@ class Leaderboard extends React.Component {
                     Time
                 </div>
               </div>         
-             { leaderboardScores.map((score, index) => <Row className="leaderboard-row">
-                    <div className='score-rank'>
+             { leaderboardScores.map((score, index) => <div className="leaderboard-row">
+                    <div className='score-index'>
                         {index + 1}.
                     </div>
                     <div className='score-player'>
@@ -41,9 +41,9 @@ class Leaderboard extends React.Component {
                     <div className='score-time'>
                     {score.time}
                     </div>
-                    </Row>)} 
+                    </div>)} 
              </List> }
-             <ParticlesBg type="square" bg={true} num={7}></ParticlesBg>                  
+             <ParticlesBg type="polygon" bg={true} num={0.5}></ParticlesBg>                  
         </Page> 
     );  }
 }
