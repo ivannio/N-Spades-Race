@@ -10,7 +10,7 @@ import "onsenui/css/onsen-css-components.css";
 class Leaderboard extends React.Component {
 
   render() {
-    const { leaderboardScores } = this.props;    
+    const { leaderboardScores, player } = this.props;    
     return (    
       <Page className="score-page">
           { leaderboardScores === null ? <></> :
@@ -31,15 +31,18 @@ class Leaderboard extends React.Component {
                     <div className='score-index'>
                         {index + 1}.
                     </div>
-                    <div className='score-player'>
+                    { player !== null && score.playerName === player.userName ? <div className='hey-thats-me'>
                     {score.playerName}
-                    </div>
+                    </div> : <div className='score-player'>
+                    {score.playerName}
+                    </div> }
+                    
                     <div className='score-time'>
                     {score.time}
                     </div>
                     </div>)} 
              </List> }
-             <ParticlesBg type="polygon" bg={true} num={0.5}></ParticlesBg>                  
+             <ParticlesBg type="polygon" bg={true} num={1}></ParticlesBg>                  
         </Page> 
     );  }
 }

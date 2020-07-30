@@ -96,9 +96,9 @@ class App extends React.Component {
            )} />
           <Route path="/sign-up">
             {authed && player !== null ? (
-              <Redirect to="/" logOutUser={this.logOutUser} player={player}/>
+              <Redirect to="/" authed={authed} logOutUser={this.logOutUser} player={player}/>
             ) : (
-              <SignInSignUp authed={authed}></SignInSignUp>
+              <SignInSignUp></SignInSignUp>
             )}
           </Route>
         </Switch>

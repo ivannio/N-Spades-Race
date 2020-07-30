@@ -25,7 +25,7 @@
     justify-content: space-around;
     margin-right: 2em;
     padding: 0.8em 0em;
-    border-bottom: 1px solid #a3cef1d2; 
+    border-bottom: 1px solid #a3cef1; 
 }
 
 .leaderboard-title {
@@ -57,6 +57,10 @@
 .score-player {
     display: flex;
     justify-content: flex-start;
+}
+
+.hey-thats-me {
+    color: #E9C46A;
 }
 
 .score-time {
