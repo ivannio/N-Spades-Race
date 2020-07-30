@@ -6,21 +6,26 @@ import MyHighScores from "../../shared/MyHighScores/MyHighScores";
 import './Scores.scss';
 
 class Scores extends React.Component {
+  state = {
+    index: 0,
+  }
 
   render() {
     const { authed, player, myHighScores, leaderboardScores } = this.props; 
     return (  
       <Page>
-        { authed && myHighScores === null ? <></> : <><Tabbar
+        <Tabbar
+          onPreChange = {({index}) => this.setState ({index})}
+          index={this.state.index}
           position="top"
           swipeable={true}
-          renderTabs={() => [
+          renderTabs={(activeIndex, tabbar) => [
             {
-              content: <Leaderboard leaderboardScores={leaderboardScores} player={player} />,
+              content: <Leaderboard tabbar={tabbar} leaderboardScores={leaderboardScores} player={player} />,
               tab: <Tab label="Leaderboard" icon="fa-chess-king" />,
             },
             {
-              content: <MyHighScores authed={authed} player={player} myHighScores={myHighScores} />,
+              content: <MyHighScores tabbar={tabbar} authed={authed} player={player} myHighScores={myHighScores} />,
               tab: <Tab label="My High Scores" icon="fa-stopwatch" />,
             },
           ]}/> 
@@ -31,8 +36,8 @@ class Scores extends React.Component {
           </Link>
           { authed ? <Link><Button modifier="material" onClick={this.props.logOutUser} className="custom-button">Logout</Button></Link>  : <Link to={"/sign-up"}>
         <Button modifier="material" className="custom-button">Login / Create Account</Button>
-            </Link>} 
-    </BottomToolbar></> }                  
+            </Link> } 
+    </BottomToolbar>                  
       </Page>
     );
   }

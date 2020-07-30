@@ -30,12 +30,11 @@ class App extends React.Component {
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({ firebaseUser: user, authed: true });
+      if (user) {  
         user.getIdToken().then((token) => {
-          sessionStorage.setItem("token", token);
+          sessionStorage.setItem("token", token);          
         });
-        this.getPlayer(this.state.firebaseUser.uid);
+        this.setState({ firebaseUser: user, authed: true });        
       } else {
         this.setState({ authed: false, player: null, firebaseUser: null, myHighScores: null });
       }
@@ -50,25 +49,29 @@ class App extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.player !== prevState.player) {
-      if (this.state.player !== null) {
-        this.getPlayerHighScores(this.state.player);
+    if (this.state !== prevState) {
+      if (this.state.firebaseUser !== null && this.state.player === null) {
+        this.getPlayer(this.state.firebaseUser.uid);  
       }  
     }
+  }
+
+  setPlayerAndScoresToState = (player) => {
+    this.setState({ player });
+    this.getPlayerHighScores(player);
   }
 
   getPlayer = (uid) => {
     playerData
       .getPlayerByFirebaseUid(uid)
-      .then((response) => this.setState({ player: response }))
+      .then((response) => this.setPlayerAndScoresToState(response))
       .catch((error) => console.error("error getting user", error));
   };
 
   updateAppHighScores = () => {
     this.getPlayerHighScores(this.state.player);
     this.getLeaderboard();
-    console.log("ran the update function");
-  }
+ }
 
   getPlayerHighScores = (player) => {  
     scoreData.getHighScoresByPlayerId(player.id)
@@ -84,7 +87,7 @@ class App extends React.Component {
     const { authed, player, leaderboardScores, myHighScores } = this.state;
     return (
       <Router>
-        <Switch>          
+        { authed && myHighScores === null ? <></> : <Switch>          
           <Route path="/" exact render={() => (
           <Home authed={authed} logOutUser={this.logOutUser} player={player} />
            )} />
@@ -95,13 +98,14 @@ class App extends React.Component {
           <Scores authed={authed} player={player} logOutUser={this.logOutUser} leaderboardScores={leaderboardScores} myHighScores={myHighScores}/>
            )} />
           <Route path="/sign-up">
-            {authed && player !== null ? (
+            {authed ? (
               <Redirect to="/" authed={authed} logOutUser={this.logOutUser} player={player}/>
             ) : (
               <SignInSignUp></SignInSignUp>
             )}
           </Route>
-        </Switch>
+        </Switch> }
+        
       </Router>
     );
   }

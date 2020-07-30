@@ -115,7 +115,7 @@ class Game extends React.Component {
   addScore = (score) => {
     scoreData
       .addScore(score)
-      .then((response) => console.log("added score:", response))
+      .then(() => this.props.updateAppHighScores())
       .catch((error) => console.error("error adding score to db:", error));
   };
 
@@ -164,8 +164,7 @@ class Game extends React.Component {
         this.firstWin(scoreToAdd);
       } else if (highScore.raw > scoreToAdd.raw) {
         this.newHighScore(scoreToAdd);
-      }
-      this.props.updateAppHighScores();
+      } 
     } else this.noAuthWin(formattedTime);
   };
 

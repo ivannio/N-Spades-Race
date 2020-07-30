@@ -8,9 +8,8 @@ import "./Home.scss";
 
 class Home extends React.Component {
   render() {
-    const { authed, player } = this.props;
+    const { authed } = this.props;
     return (
-      authed && player === null ? <></> :
       <Page>
         <Col className="home-header-column">
           <h1 className="home-header">Matches-N-Spades</h1>

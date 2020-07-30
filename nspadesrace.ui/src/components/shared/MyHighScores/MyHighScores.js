@@ -9,11 +9,10 @@ import "onsenui/css/onsen-css-components.css";
 
 class MyHighScores extends React.Component {
   render() {
-    const { player, authed, myHighScores } = this.props; 
-       
+    const { player, authed, myHighScores } = this.props;   
     return (    
       <Page className="score-page">
-          { authed ? <List modifier="material" className="leaderboard-list">
+          { authed && myHighScores !== null ? <List modifier="material" className="leaderboard-list">
               <div className="leaderboard-title">{player.userName}'s Top Scores</div>
               <div className="personal-score-legend">     
                 <div className='score-player-legend'>
