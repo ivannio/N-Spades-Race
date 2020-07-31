@@ -46,7 +46,11 @@ class Card extends React.Component {
 
   render() {
     const { isFlipped } = this.state;
-    const { card } = this.props;
+    const { card, player } = this.props;
+    let cardBack = 'back';
+    if (player !== null && player.gilded) {
+      cardBack = 'back_gilded';
+    };
     return (
       <ReactCardFlip flipSpeedBackToFront={0.3} flipSpeedFrontToBack={0.3} isFlipped={isFlipped}>
         <div
@@ -54,13 +58,13 @@ class Card extends React.Component {
           onClick={this.handleClick}
           style={{
             backgroundImage:
-              "url(https://raw.githubusercontent.com/ivannio/N-Spades-Race/game-setup/nspadesrace.ui/src/assets/images/cards/back.jpeg)",
+              `url(https://raw.githubusercontent.com/ivannio/N-Spades-Race/master/nspadesrace.ui/src/assets/images/cards/${cardBack}.jpeg)`,
           }}
         ></div>
         <div
           className="game-card-img"
           style={{
-            backgroundImage: `url(https://raw.githubusercontent.com/ivannio/N-Spades-Race/game-setup/nspadesrace.ui/src/assets/images/cards/${card.value}.jpeg)`,
+            backgroundImage: `url(https://raw.githubusercontent.com/ivannio/N-Spades-Race/master/nspadesrace.ui/src/assets/images/cards/${card.value}.jpeg)`,
           }}
         ></div>
       </ReactCardFlip>

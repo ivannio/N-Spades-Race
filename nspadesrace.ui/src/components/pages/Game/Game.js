@@ -43,20 +43,6 @@ class Game extends React.Component {
     this.setState({ loading: false });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.player !== prevProps.player) {
-      if (this.props.player.id !== undefined)
-        this.getHighScore(this.props.player);
-    }
-  }
-
-  getHighScore = (player) => {
-    scoreData
-      .getHighestScoreByPlayerId(player.id)
-      .then((response) => this.setState({ highScore: response }))
-      .catch((error) => console.error("error getting high score", error));
-  };
-
   getCards = () => {
     const stack = getCards.getCards();
     this.setState({ stack });
@@ -252,6 +238,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowOne.map((card) => (
                 <Card
+                  player={player}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -268,6 +255,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowTwo.map((card) => (
                 <Card
+                  player={player}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -284,6 +272,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowThree.map((card) => (
                 <Card
+                  player={player}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -300,6 +289,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowFour.map((card) => (
                 <Card
+                  player={player}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -316,6 +306,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowFive.map((card) => (
                 <Card
+                  player={player}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -332,6 +323,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowSix.map((card) => (
                 <Card
+                  player={player}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -385,25 +377,25 @@ class Game extends React.Component {
                 </Button>
 
                 {authed ? (
-                  <Button className="custom-button" modifier="material">
-                    <Link
-                      className="custom-button"
-                      style={{ textDecoration: "none" }}
-                      to={"/"}
-                    >
+                  <Link
+                    className="custom-button"
+                    style={{ textDecoration: "none" }}
+                    to={"/"}
+                  >
+                    <Button className="custom-button" modifier="material">
                       Home
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
                 ) : (
-                  <Button className="custom-button" modifier="material">
-                    <Link
-                      className="custom-button"
-                      style={{ textDecoration: "none" }}
-                      to={"/sign-up"}
-                    >
+                  <Link
+                    className="custom-button"
+                    style={{ textDecoration: "none" }}
+                    to={"/sign-up"}
+                  >
+                    <Button className="custom-button" modifier="material">
                       Login / Create Account
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
                 )}
               </>
             )}
@@ -417,8 +409,8 @@ class Game extends React.Component {
               <br />
               --Time will start as soon as the first card's face is shown
               <br />
-              --Flip over another card. If it matches the first card, both cards will remain
-              flipped
+              --Flip over another card. If it matches the first card, both cards
+              will remain flipped
               <br />
               --If the cards do not match, both cards will flip back over.
               <br />
