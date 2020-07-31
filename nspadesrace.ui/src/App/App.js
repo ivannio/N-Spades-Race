@@ -32,9 +32,9 @@ class App extends React.Component {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {  
         user.getIdToken().then((token) => {
-          sessionStorage.setItem("token", token);          
-        });
-        this.setState({ firebaseUser: user, authed: true });        
+          sessionStorage.setItem("token", token);
+          this.setState({ firebaseUser: user, authed: true });          
+        });         
       } else {
         this.setState({ authed: false, player: null, firebaseUser: null, myHighScores: null });
       }
@@ -48,23 +48,23 @@ class App extends React.Component {
     .catch((error) => console.log("error getting leaderboard", error))
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevState) {
     if (this.state !== prevState) {
-      if (this.state.firebaseUser !== null && this.state.player === null) {
-        this.getPlayer(this.state.firebaseUser.uid);  
+      if (this.state.authed && !prevState.authed) {
+        if (this.state.firebaseUser !== null && this.state.player === null) {
+          this.getPlayer(this.state.firebaseUser.uid);
+        }    
+      }
+      if (this.state.player !== null && this.state.myHighScores === null) {
+        this.getPlayerHighScores(this.state.player);
       }  
     }
-  }
-
-  setPlayerAndScoresToState = (player) => {
-    this.setState({ player });
-    this.getPlayerHighScores(player);
   }
 
   getPlayer = (uid) => {
     playerData
       .getPlayerByFirebaseUid(uid)
-      .then((response) => this.setPlayerAndScoresToState(response))
+      .then((response) => this.setState({ player: response}))
       .catch((error) => console.error("error getting user", error));
   };
 
@@ -87,12 +87,12 @@ class App extends React.Component {
     const { authed, player, leaderboardScores, myHighScores } = this.state;
     return (
       <Router>
-        { authed && myHighScores === null ? <></> : <Switch>          
+        <Switch>          
           <Route path="/" exact render={() => (
           <Home authed={authed} logOutUser={this.logOutUser} player={player} />
            )} />
           <Route path="/game" render={() => (
-          <Game authed={authed} logOutUser={this.logOutUser} player={player} updateAppHighScores={this.updateAppHighScores}/>
+          <Game authed={authed} logOutUser={this.logOutUser} player={player} updateAppHighScores={this.updateAppHighScores} myHighScores={myHighScores}/>
            )} />
            <Route path="/scores" render={() => (
           <Scores authed={authed} player={player} logOutUser={this.logOutUser} leaderboardScores={leaderboardScores} myHighScores={myHighScores}/>
@@ -104,8 +104,7 @@ class App extends React.Component {
               <SignInSignUp></SignInSignUp>
             )}
           </Route>
-        </Switch> }
-        
+        </Switch>   
       </Router>
     );
   }

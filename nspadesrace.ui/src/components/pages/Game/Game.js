@@ -32,7 +32,6 @@ class Game extends React.Component {
       value: "first",
     },
     matches: 0,
-    highScore: null,
     toastOpen: false,
     toastText: "",
     rulesOpen: false,
@@ -40,10 +39,6 @@ class Game extends React.Component {
   };
 
   componentDidMount() {
-    const { authed, player } = this.props;
-    if (authed) {
-      this.getHighScore(player);
-    }
     this.getCards();
     this.setState({ loading: false });
   }
@@ -119,19 +114,25 @@ class Game extends React.Component {
       .catch((error) => console.error("error adding score to db:", error));
   };
 
-  newHighScore = (score) => {
-    this.setState({ highScore: score });
-    this.toaster("Nice! You just got a new high score!");
+  firstWin = (time) => {
+    this.toaster(
+      `Finished in ${time}! Your first score has been saved. Visit your high scores page to see your 10 best and try to keep replacing them!`
+    );
   };
 
-  firstWin = (score) => {
-    this.setState({ highScore: score });
-    this.toaster("Congrats! you won your first game!");
+  newHighScore = (time) => {
+    this.toaster(`Nice job! ${time} is your new fastest time!`);
+  };
+
+  authWin = (time) => {
+    this.toaster(`Finished in ${time}!`);
   };
 
   noAuthWin = (time) => {
-    this.toaster(`You finished in ${time}! Login or create an account to save your next score!`);
-  }
+    this.toaster(
+      `Finished in ${time}! Login or create an account to save your next time!`
+    );
+  };
 
   closeToast = () => {
     this.setState({ toastOpen: false, toastText: "" });
@@ -141,7 +142,7 @@ class Game extends React.Component {
     this.setState({ toastText: text, toastOpen: true });
     setTimeout(() => {
       this.closeToast();
-    }, 4000);
+    }, 7000);
   };
 
   finish = () => {
@@ -150,21 +151,23 @@ class Game extends React.Component {
     const { timerTime } = this.state;
     const centiseconds = ("0" + (Math.floor(timerTime / 10) % 100)).slice(-2);
     const seconds = ("0" + (Math.floor(timerTime / 1000) % 60)).slice(-2);
-    const minutes = ("0" + (Math.floor(timerTime / 60000) % 60)).slice(-2); 
-    const formattedTime = `${minutes}:${seconds}:${centiseconds}`; 
+    const minutes = ("0" + (Math.floor(timerTime / 60000) % 60)).slice(-2);
+    const formattedTime = `${minutes}:${seconds}:${centiseconds}`;
     if (this.props.authed) {
-      const { highScore } = this.state; 
+      const highScore = this.props.myHighScores[0];
       const scoreToAdd = {
         playerId: this.props.player.id,
         raw: timerTime,
         time: formattedTime,
       };
       this.addScore(scoreToAdd);
-      if (highScore === null) {
-        this.firstWin(scoreToAdd);
+      if (highScore === undefined) {
+        this.firstWin(scoreToAdd.time);
       } else if (highScore.raw > scoreToAdd.raw) {
-        this.newHighScore(scoreToAdd);
-      } 
+        this.newHighScore(scoreToAdd.time);
+      } else {
+        this.authWin(scoreToAdd.time);
+      }
     } else this.noAuthWin(formattedTime);
   };
 
@@ -224,9 +227,13 @@ class Game extends React.Component {
       <></>
     ) : (
       <Page>
-        { toastOpen ? <Toast isOpen={true}><div className="toast-text">
-            {toastText}
-    </div></Toast> : <></> }
+        {toastOpen ? (
+          <Toast isOpen={true}>
+            <div className="toast-text">{toastText}</div>
+          </Toast>
+        ) : (
+          <></>
+        )}
         <Col className="time-column">
           <div className="time">
             {minutes}:{seconds}:{centiseconds}
@@ -350,7 +357,8 @@ class Game extends React.Component {
                   size={30}
                   icon="fa-check-circle"
                 ></Icon>
-                logged in as<div className="player-username">{player.userName}</div>
+                logged in as
+                <div className="player-username">{player.userName}</div>
               </div>
             </div>
           ) : (
@@ -375,18 +383,27 @@ class Game extends React.Component {
                 >
                   How To Play
                 </Button>
+
                 {authed ? (
-                  <Link className="custom-button" to={"/"}>
-                    <Button className="custom-button" modifier="material">
+                  <Button className="custom-button" modifier="material">
+                    <Link
+                      className="custom-button"
+                      style={{ textDecoration: "none" }}
+                      to={"/"}
+                    >
                       Home
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                 ) : (
-                  <Link className="custom-button" to={"/sign-up"}>
-                    <Button className="custom-button" modifier="material">
+                  <Button className="custom-button" modifier="material">
+                    <Link
+                      className="custom-button"
+                      style={{ textDecoration: "none" }}
+                      to={"/sign-up"}
+                    >
                       Login / Create Account
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                 )}
               </>
             )}
@@ -396,17 +413,16 @@ class Game extends React.Component {
           <AlertDialog isOpen={true} onCancel={this.closeRules} cancelable>
             <div className="alert-dialog-title">How To Play</div>
             <div className="alert-dialog-content">
-              -Tap a card to flip it over and reveal the face value.
+              --Tap a card to flip it over and reveal the face value
               <br />
-              -Time starts as soon as the first card's face is shown.
+              --Time will start as soon as the first card's face is shown
               <br />
-              -Flip over another card. If it is a match, the cards will remain
-              flipped.
+              --Flip over another card. If it matches the first card, both cards will remain
+              flipped
               <br />
-              -If the cards do not match, thy will flip back over.
+              --If the cards do not match, both cards will flip back over.
               <br />
-              -Try to remember which cards are where, and match them all as fast
-              as possible to win!
+              --Find all of the matches to win!
             </div>
             <div className="alert-dialog-footer">
               <AlertDialogButton
