@@ -14,15 +14,7 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-const getPlayerById = (id) =>
-  new Promise((resolve, reject) => {
-    axios
-      .get(`${baseUrl}/player/${id}`)
-      .then((response) => resolve(response.data))
-      .catch((error) => reject(error));
-  });
-
-  const getPlayerByFirebaseUid = (uid) =>
+const getPlayerByFirebaseUid = (uid) =>
   new Promise((resolve, reject) => {
     axios
       .get(`${baseUrl}/player/fbid/${uid}`)
@@ -51,4 +43,4 @@ const registerFirebaseAndDBUser = (email, passWord, userName) => {
 
 const addNewPlayer = (user) => axios.post(`${baseUrl}/player`, user);
 
-export default { getPlayerById, addNewPlayer, registerFirebaseAndDBUser, getPlayerByFirebaseUid };
+export default { registerFirebaseAndDBUser, getPlayerByFirebaseUid, addNewPlayer };
