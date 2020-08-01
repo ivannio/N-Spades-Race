@@ -358,7 +358,7 @@ class Game extends React.Component {
           )}
 
           <div className="game-bar-right">
-            {timerOn || gameFinished ? (
+            { timerOn || gameFinished ?
               <Button
                 onClick={this.resetGame}
                 modifier="material"
@@ -366,7 +366,7 @@ class Game extends React.Component {
               >
                 Reset
               </Button>
-            ) : (
+            : 
               <>
                 <Button
                   onClick={this.openRules}
@@ -374,50 +374,32 @@ class Game extends React.Component {
                   className="custom-button"
                 >
                   How To Play
-                </Button>
-
-                {authed ? (
+                </Button>    
                   <Link
-                    className="custom-button"
+                    className="button--material button custom-button"
                     style={{ textDecoration: "none" }}
                     to={"/"}
                   >
-                    <Button className="custom-button" modifier="material">
-                      Home
-                    </Button>
-                  </Link>
-                ) : (
-                  <Link
-                    className="custom-button"
-                    style={{ textDecoration: "none" }}
-                    to={"/sign-up"}
-                  >
-                    <Button className="custom-button" modifier="material">
-                      Login / Create Account
-                    </Button>
-                  </Link>
-                )}
+                    Home
+                  </Link>    
               </>
-            )}
+            }
           </div>
         </BottomToolbar>
         {rulesOpen ? (
-          <AlertDialog isOpen={true} onCancel={this.closeRules} cancelable>
+          <AlertDialog modifier="material" isOpen={true} onCancel={this.closeRules} cancelable>
             <div className="alert-dialog-title">How To Play</div>
             <div className="alert-dialog-content">
-              --Tap a card to flip it over and reveal the face value
-              <br />
-              --Time will start as soon as the first card's face is shown
-              <br />
-              --Flip over another card. If it matches the first card, both cards
-              will remain flipped
-              <br />
-              --If the cards do not match, both cards will flip back over.
-              <br />
-              --Find all of the matches to win!
+              <p>Tap a card to flip it over and reveal the face value</p>      
+              <p>Time will start as soon as the first card's face is shown</p>
+              <p>Flip over another card. If it matches the first card, both cards
+                    will remain flipped</p>
+              <p>If the cards do not match, both cards will flip back over</p>
+              <p>Find all of the matches to win!</p>     
             </div>
             <div className="alert-dialog-footer">
               <AlertDialogButton
+                modifier="material"
                 onClick={this.closeRules}
                 className="alert-dialog-button"
               >
@@ -428,7 +410,6 @@ class Game extends React.Component {
         ) : (
           <></>
         )}
-
         {gameFinished ? <ParticlesBg type="lines" bg={true} /> : <></>}
       </Page>
     );

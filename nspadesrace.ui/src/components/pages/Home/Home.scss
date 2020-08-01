@@ -16,7 +16,6 @@
     font-family: 'Rowdies', cursive !important;
     font-size: 55px !important;
     text-align: center;
-    color: #c7ccdb;
 }
 
 .home-buttons-column {
@@ -34,7 +33,7 @@
 .or::before, .or::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid #c7ccdb;
+    border-bottom: 1px solid #ffffff;
 }
 .or::before {
     margin-right: .25em;
@@ -53,15 +52,15 @@
 }
 
 .logout-fab {
-    background-color: #6290c8 !important;
+    background-color: rgba(17, 59, 94, 1) !important;
 }
 
 .logout-fab-icon {
-    color: black !important;
+    color: #E9C46A !important;
 }
 
 .logout-fab-label {
-    color: #c7ccdb;
+    color: #E9C46A;
     font-size: 1em;
     top: 21px;
     bottom: auto;

@@ -15,7 +15,6 @@ import Scores from "../components/pages/Scores/Scores";
 import firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConnection from "../helpers/firebaseConnection";
-import "./App.scss";
 
 firebaseConnection.firebaseInit();
 
@@ -42,36 +41,33 @@ class App extends React.Component {
     this.getLeaderboard();
   }
 
+  componentDidUpdate(prevState) {
+    if (this.state !== prevState) {
+      if (this.state.authed && !prevState.authed) {
+        if (this.state.firebaseUser !== null && this.state.player === null) {
+          console.log("first update ran");
+          this.getPlayer(this.state.firebaseUser.uid);
+        }    
+      }
+      if (this.state.player !== null && this.state.myHighScores === null) {
+        console.log("second update ran")
+        this.getPlayerHighScores(this.state.player);
+      }  
+    }
+  }
+
   getLeaderboard = () => {
     scoreData.getLeaderboard()
     .then((response) => this.setState({ leaderboardScores: response }))
     .catch((error) => console.log("error getting leaderboard", error))
   };
 
-  componentDidUpdate(prevState) {
-    if (this.state !== prevState) {
-      if (this.state.authed && !prevState.authed) {
-        if (this.state.firebaseUser !== null && this.state.player === null) {
-          this.getPlayer(this.state.firebaseUser.uid);
-        }    
-      }
-      if (this.state.player !== null && this.state.myHighScores === null) {
-        this.getPlayerHighScores(this.state.player);
-      }  
-    }
-  }
-
   getPlayer = (uid) => {
     playerData
       .getPlayerByFirebaseUid(uid)
-      .then((response) => this.setState({ player: response}))
+      .then((response) => this.setState({ player: response }))
       .catch((error) => console.error("error getting user", error));
   };
-
-  updateAppHighScores = () => {
-    this.getPlayerHighScores(this.state.player);
-    this.getLeaderboard();
- }
 
   getPlayerHighScores = (player) => {  
     scoreData.getHighScoresByPlayerId(player.id)
@@ -79,17 +75,22 @@ class App extends React.Component {
   .catch((error) => console.log("error getting leaderboard", error))      
   };
 
+  updateAppHighScores = () => {
+    this.getPlayerHighScores(this.state.player);
+    this.getLeaderboard();
+ }  
+
   logOutUser = () => {
     authData.logOut();
   };
 
   render() {
     const { authed, player, leaderboardScores, myHighScores } = this.state;
-    return (
+    return (  
       <Router>
         <Switch>          
           <Route path="/" exact render={() => (
-          <Home authed={authed} logOutUser={this.logOutUser} player={player} />
+          <Home authed={authed} logOutUser={this.logOutUser} myHighScores={myHighScores} player={player} />
            )} />
           <Route path="/game" render={() => (
           <Game authed={authed} logOutUser={this.logOutUser} player={player} updateAppHighScores={this.updateAppHighScores} myHighScores={myHighScores}/>
