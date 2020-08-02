@@ -12,6 +12,7 @@ import Home from "../components/pages/Home/Home";
 import SignInSignUp from "../components/pages/SignInSignUp/SignInSignUp";
 import Game from "../components/pages/Game/Game";
 import Scores from "../components/pages/Scores/Scores";
+import Achievements from '../components/pages/Achievements/Achievements';
 import firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConnection from "../helpers/firebaseConnection";
@@ -98,6 +99,13 @@ class App extends React.Component {
            <Route path="/scores" render={() => (
           <Scores authed={authed} player={player} logOutUser={this.logOutUser} leaderboardScores={leaderboardScores} myHighScores={myHighScores}/>
            )} />
+           <Route path="/achievements">
+           {!authed ? (
+              <Redirect to="/" authed={authed} logOutUser={this.logOutUser} player={player}/>
+            ) : (
+              <Achievements authed={authed} player={player} logOutUser={this.logOutUser} />
+            )}
+           </Route>     
           <Route path="/sign-up">
             {authed ? (
               <Redirect to="/" authed={authed} logOutUser={this.logOutUser} player={player}/>

@@ -51,6 +51,15 @@
     font-weight: bold;
 }
 
+.primary-button {
+    background-color: #56876D;
+    text-align: center;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+}
+
 .logout-fab {
     background-color: rgba(17, 59, 94, 1) !important;
 }
@@ -60,11 +69,12 @@
 }
 
 .logout-fab-label {
+    font-family: 'Rowdies', cursive !important;
     color: #E9C46A;
     font-size: 1em;
-    top: 21px;
+    top: 19px;
     bottom: auto;
-    right: 70px;
+    right: 66px;
     left: auto;
     position: absolute;
 }

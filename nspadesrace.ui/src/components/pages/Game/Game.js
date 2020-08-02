@@ -128,7 +128,7 @@ class Game extends React.Component {
     this.setState({ toastText: text, toastOpen: true });
     setTimeout(() => {
       this.closeToast();
-    }, 7000);
+    }, 6000);
   };
 
   finish = () => {
@@ -358,15 +358,30 @@ class Game extends React.Component {
           )}
 
           <div className="game-bar-right">
-            { timerOn || gameFinished ?
+            { timerOn ? (
               <Button
                 onClick={this.resetGame}
                 modifier="material"
                 className="reset-button"
               >
                 Reset
-              </Button>
-            : 
+              </Button> )
+            : (  gameFinished ? <>
+              <Button
+                onClick={this.resetGame}
+                modifier="material"
+                className="primary-button"
+              >
+                Play Again
+              </Button>    
+                <Link
+                  className="button--material button custom-button"
+                  style={{ textDecoration: "none" }}
+                  to={"/scores"}
+                >
+                  High Scores
+                </Link>    
+            </> :  
               <>
                 <Button
                   onClick={this.openRules}
@@ -383,18 +398,18 @@ class Game extends React.Component {
                     Home
                   </Link>    
               </>
-            }
+            )}
           </div>
         </BottomToolbar>
         {rulesOpen ? (
           <AlertDialog modifier="material" isOpen={true} onCancel={this.closeRules} cancelable>
             <div className="alert-dialog-title">How To Play</div>
             <div className="alert-dialog-content">
-              <p>Tap a card to flip it over and reveal the face value</p>      
-              <p>Time will start as soon as the first card's face is shown</p>
+              <p>Tap a card to flip it over and reveal the face value.</p>      
+              <p>Time will start as soon as the first card's face is shown.</p>
               <p>Flip over another card. If it matches the first card, both cards
-                    will remain flipped</p>
-              <p>If the cards do not match, both cards will flip back over</p>
+                    will remain flipped.</p>
+              <p>If the cards do not match, both cards will flip back over.</p>
               <p>Find all of the matches to win!</p>     
             </div>
             <div className="alert-dialog-footer">

@@ -30,14 +30,12 @@ class Home extends React.Component {
       <Page>
         { authed && myHighScores === null ? <></> : <>
         <Col className="home-header-column">
-        <h1 className="home-header">Matches-N-Spades</h1>
+        <h1 className="home-header">[insert logo]</h1>
       </Col>
       <Col className="home-buttons-column">
         <Row className="home-row">
-          <Link className="custom-button button button--material" to={"/game"}>
-            
-              {authed ? "Play" : "Play Logged Out"}
-           
+          <Link className="primary-button button button--material" to={"/game"}>         
+              {authed ? "Play" : "Play Logged Out"}        
           </Link>
         </Row>
         { authed ? <Row className="home-row">
