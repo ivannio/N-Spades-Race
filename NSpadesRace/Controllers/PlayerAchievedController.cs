@@ -27,11 +27,10 @@ namespace NSpadesRace.Controllers
             return Ok(allPlayerAchieved);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetPlayerAchievedById(int id)
+        [HttpGet("{playerId}")]
+        public IActionResult GetAchievedByPlayerId(int playerId)
         {
-            var playerAchieved = _repository.GetById(id);
-            if (playerAchieved == null) return NotFound("No playerAchieved with that id could be found.");
+            var playerAchieved = _repository.GetByPlayerId(playerId);            
             return Ok(playerAchieved);
         }
 

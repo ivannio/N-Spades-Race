@@ -26,18 +26,18 @@ namespace NSpadesRace.DataAccess
             }
         }
 
-        public PlayerAchieved GetById(int id)
+        public IEnumerable<PlayerAchieved> GetByPlayerId(int playerId)
         {
             var query = @"select *
                           from playerAchieved
-                          where id = @id";
+                          where playerId = @playerId";
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                var parameters = new { Id = id };
+                var parameters = new { PlayerId = playerId };
 
-                var playerAchieved = db.QueryFirstOrDefault<PlayerAchieved>(query, parameters);
-                return playerAchieved;
+                return db.Query<PlayerAchieved>(query, parameters);
+
             }
         }
 

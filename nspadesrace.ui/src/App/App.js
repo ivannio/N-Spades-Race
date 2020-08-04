@@ -8,6 +8,7 @@ import {
 import authData from '../helpers/data/authData';
 import playerData from "../helpers/data/playerData";
 import scoreData from '../helpers/data/scoreData';
+import achievementData from '../helpers/data/achievementData';
 import Home from "../components/pages/Home/Home";
 import SignInSignUp from "../components/pages/SignInSignUp/SignInSignUp";
 import Game from "../components/pages/Game/Game";
@@ -26,6 +27,8 @@ class App extends React.Component {
     player: null,
     myHighScores: null,
     leaderboardScores: null,
+    achievements: null,
+    playerAchieved: null,
   };
 
   componentDidMount() {
@@ -36,26 +39,27 @@ class App extends React.Component {
           this.setState({ firebaseUser: user, authed: true });          
         });         
       } else {
-        this.setState({ authed: false, player: null, firebaseUser: null, myHighScores: null });
+        this.setState({ authed: false, player: null, firebaseUser: null, myHighScores: null, playerAchieved: null });
       }
     });
     this.getLeaderboard();
+    this.getAchievements();
   }
 
-  componentDidUpdate(prevState) {
-    if (this.state !== prevState) {
-      if (this.state.authed && !prevState.authed) {
-        if (this.state.firebaseUser !== null && this.state.player === null) {
-          console.log("first update ran");
-          this.getPlayer(this.state.firebaseUser.uid);
-        }    
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.firebaseUser !== prevState.firebaseUser && this.state.firebaseUser !== null) {
+        this.getPlayer(this.state.firebaseUser.uid);   
+      };
+      if (this.state.player === 'tryagain' && prevState.player === null) {
+        console.log("hit try again conditional")
+        this.getPlayer(this.state.firebaseUser.uid);
       }
-      if (this.state.player !== null && this.state.myHighScores === null) {
-        console.log("second update ran")
-        this.getPlayerHighScores(this.state.player);
-      }  
+    if (this.state.player !== prevState.player && this.state.player !== null) {
+      const playerId = this.state.player.id;
+      this.getPlayerHighScores(playerId);
+      this.getPlayerAchieved(playerId);
+      };
     }
-  }
 
   getLeaderboard = () => {
     scoreData.getLeaderboard()
@@ -63,17 +67,29 @@ class App extends React.Component {
     .catch((error) => console.log("error getting leaderboard", error))
   };
 
+  getAchievements = () => {
+    achievementData.getAchievements()
+    .then((response) => this.setState({ achievements: response }))
+    .catch((error) => console.error("error getting achievements", error))
+  }
+
   getPlayer = (uid) => {
     playerData
       .getPlayerByFirebaseUid(uid)
       .then((response) => this.setState({ player: response }))
-      .catch((error) => console.error("error getting user", error));
+      .catch((error) => this.setState({ player: 'tryagain' }));
   };
 
-  getPlayerHighScores = (player) => {  
-    scoreData.getHighScoresByPlayerId(player.id)
+  getPlayerHighScores = (playerId) => {  
+    scoreData.getHighScoresByPlayerId(playerId)
   .then((response) => this.setState({ myHighScores: response }))
   .catch((error) => console.log("error getting leaderboard", error))      
+  };
+
+  getPlayerAchieved = (playerId) => {
+    achievementData.getAchievedByPlayerId(playerId)
+    .then((response) => this.setState({ playerAchieved: response }))
+    .catch((error) => console.error("error getting player achieved achievements", error))
   };
 
   updateAppHighScores = () => {
@@ -86,7 +102,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { authed, player, leaderboardScores, myHighScores } = this.state;
+    const { authed, player, leaderboardScores, myHighScores, achievements, playerAchieved } = this.state;
     return (  
       <Router>
         <Switch>          
@@ -103,12 +119,12 @@ class App extends React.Component {
            {!authed ? (
               <Redirect to="/" authed={authed} logOutUser={this.logOutUser} player={player}/>
             ) : (
-              <Achievements authed={authed} player={player} logOutUser={this.logOutUser} />
+              <Achievements authed={authed} player={player} logOutUser={this.logOutUser} achievements={achievements} playerAchieved={playerAchieved} />
             )}
            </Route>     
           <Route path="/sign-up">
             {authed ? (
-              <Redirect to="/" authed={authed} logOutUser={this.logOutUser} player={player}/>
+              <Redirect to="/" authed={authed} logOutUser={this.logOutUser} player={player} myHighScores={myHighScores}/>
             ) : (
               <SignInSignUp></SignInSignUp>
             )}

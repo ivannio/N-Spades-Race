@@ -6,7 +6,7 @@ import "onsenui/css/onsen-css-components.css";
 
 class Achievements extends React.Component {
   render() {
-    const { authed, player } = this.props;
+    const { achievements, playerAchieved } = this.props;
     return (
       <Page
         renderToolbar={() => (

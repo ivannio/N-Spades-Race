@@ -28,7 +28,8 @@ class SignUp extends React.Component {
     playerData.registerFirebaseAndDBUser(email, passWord, userName);
   };
 
-  handleRegister = () => {
+  handleRegister = (e) => {
+    e.preventDefault();
     const { passWord, confirmPassWord, email, userName } = this.state;
     if (passWord !== confirmPassWord) {
       this.setState({ alertText: "Password and confirmation password do not match", alertOpen: true })

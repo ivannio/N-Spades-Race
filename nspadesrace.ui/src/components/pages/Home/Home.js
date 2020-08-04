@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Page, Col, Row, Fab, Icon } from "react-onsenui";
+import { Page, Col, Row, Fab, Icon, ProgressCircular } from "react-onsenui";
 import ParticlesBg from "particles-bg";
 import icon from '../../../assets/icon';
 import "onsenui/css/onsenui.css";
@@ -9,7 +9,6 @@ import "./Home.scss";
 
 class Home extends React.Component {
   render() {
-
     const config = {
       num: [2],
       rps: 0.9,
@@ -28,8 +27,13 @@ class Home extends React.Component {
     const { authed, myHighScores } = this.props;
     return (
       <Page>
-        { authed && myHighScores === null ? <></> : <>
-        <Col className="home-header-column">
+        { authed && myHighScores === null ? <Col className="loader-container">
+            <ProgressCircular
+              className="loading-circle"
+              modifier="material"
+              indeterminate
+            />
+          </Col> : <><Col className="home-header-column">
         <h1 className="home-header">[insert logo]</h1>
       </Col>
       <Col className="home-buttons-column">
@@ -60,8 +64,8 @@ class Home extends React.Component {
       <Fab onClick={this.props.logOutUser} className='logout-fab' modifier='mini' position='top right'>
       <Icon  icon='fa-sign-out-alt' className='logout-fab-icon' />
    </Fab></> : '' }
-      <ParticlesBg type="custom" config={config} bg={true} /> </> }
-        
+      <ParticlesBg type="custom" config={config} bg={true} /> </> }   
+          
       </Page>
     );
   }
