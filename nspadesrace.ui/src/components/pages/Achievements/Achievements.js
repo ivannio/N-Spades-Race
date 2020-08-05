@@ -12,7 +12,6 @@ import {
   ProgressCircular,
   Icon,
 } from "react-onsenui";
-import ParticlesBg from "particles-bg";
 import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
 import "./Achievements.scss";
