@@ -405,12 +405,12 @@ class Game extends React.Component {
           <AlertDialog modifier="material" isOpen={true} onCancel={this.closeRules} cancelable>
             <div className="alert-dialog-title">How To Play</div>
             <div className="alert-dialog-content">
-              <p>Tap a card to flip it over and reveal the face value.</p>      
-              <p>Time will start as soon as the first card's face is shown.</p>
-              <p>Flip over another card. If it matches the first card, both cards
-                    will remain flipped.</p>
-              <p>If the cards do not match, both cards will flip back over.</p>
-              <p>Find all of the matches to win!</p>     
+              <p>Tap a card to flip it over and reveal the face value</p>      
+              <p>Time will start as soon as the first card's face is shown</p>
+              <p>Tap to flip another card; If it matches the first, both cards
+                    will remain flipped</p>
+              <p>If the cards do not match, both cards will flip back over</p>
+              <p>Find all of the matches as fast as possible!</p>     
             </div>
             <div className="alert-dialog-footer">
               <AlertDialogButton
@@ -418,7 +418,7 @@ class Game extends React.Component {
                 onClick={this.closeRules}
                 className="alert-dialog-button"
               >
-                OK!
+                got it!
               </AlertDialogButton>
             </div>
           </AlertDialog>

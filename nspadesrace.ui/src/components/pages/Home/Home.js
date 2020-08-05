@@ -34,7 +34,7 @@ class Home extends React.Component {
               indeterminate
             />
           </Col> : <><Col className="home-header-column">
-        <h1 className="home-header">[insert logo]</h1>
+        <div className="mixnmatch-logo"></div>
       </Col>
       <Col className="home-buttons-column">
         <Row className="home-row">

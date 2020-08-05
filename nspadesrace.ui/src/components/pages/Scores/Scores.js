@@ -20,7 +20,13 @@ class Scores extends React.Component {
               <ToolbarButton className="home-toolbar-button"><Icon size={29} icon='fa-home'></Icon></ToolbarButton>              
               
               </Link>
-              { authed ? <><Link to={'/achievements'} className="custom-button button button--material" style={{ textDecoration: "none" }}>Achievements</Link> <Button modifier="material" onClick={this.props.logOutUser} className="custom-button">Logout</Button></> : <Link className="custom-button button button--material" to={"/sign-up"}>
+              { authed ? <><Link to={'/achievements'} className="custom-button button button--material" style={{ textDecoration: "none" }}>Achievements</Link><Button
+              modifier="material"
+              onClick={this.props.logOutUser}
+              className="custom-button"
+            >
+              Logout
+            </Button></> : <Link className="custom-button button button--material" to={"/sign-up"}>
             Login / Create Account
                 </Link>} 
         </BottomToolbar>

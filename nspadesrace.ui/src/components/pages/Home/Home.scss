@@ -1,9 +1,18 @@
 .home-header-column {
     display: flex;
     flex-direction: column;
-    height: 40%;
-    padding: 2em 2em 1em;
+    height: 55%;
+    padding: 2.6em;
     justify-content: center;
+}
+
+.mixnmatch-logo {
+    height: 100%;
+    width: auto;
+    background-image: url("https://raw.githubusercontent.com/ivannio/N-Spades-Race/master/nspadesrace.ui/src/assets/images/mixnmatchlogoyellow.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
 }
 
 .home-row {
@@ -12,14 +21,8 @@
     margin-right: auto;
 }
 
-.home-header {
-    font-family: 'Rowdies', cursive !important;
-    font-size: 55px !important;
-    text-align: center;
-}
-
 .home-buttons-column {
-    height: 60%;
+    height: 45%;
     padding: 0em 3em 3em;
 }
 
@@ -70,7 +73,6 @@
 
 .logout-fab-label {
     font-family: 'Rowdies', cursive !important;
-    color: #E9C46A;
     font-size: 1em;
     top: 19px;
     bottom: auto;

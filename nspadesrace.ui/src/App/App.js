@@ -51,7 +51,6 @@ class App extends React.Component {
         this.getPlayer(this.state.firebaseUser.uid);   
       };
       if (this.state.player === 'tryagain' && prevState.player === null) {
-        console.log("hit try again conditional")
         this.getPlayer(this.state.firebaseUser.uid);
       }
     if (this.state.player !== prevState.player && this.state.player !== null) {
@@ -93,7 +92,7 @@ class App extends React.Component {
   };
 
   updateAppHighScores = () => {
-    this.getPlayerHighScores(this.state.player);
+    this.getPlayerHighScores(this.state.player.id);
     this.getLeaderboard();
  }  
 
