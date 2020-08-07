@@ -46,9 +46,9 @@ class Card extends React.Component {
 
   render() {
     const { isFlipped } = this.state;
-    const { card, player } = this.props;
+    const { card, gilded } = this.props;
     let cardBack = 'back';
-    if (player !== null && player.gilded) {
+    if (gilded) {
       cardBack = 'back_gilded';
     };
     return (

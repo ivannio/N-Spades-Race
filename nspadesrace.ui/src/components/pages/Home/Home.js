@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import { Page, Col, Row, Fab, Icon, ProgressCircular } from "react-onsenui";
 import ParticlesBg from "particles-bg";
 import icon from '../../../assets/icon';
+import goldIcon from '../../../assets/goldIcon';
 import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
 import "./Home.scss";
 
 class Home extends React.Component {
   render() {
+    const { authed, myHighScores, gilded } = this.props;
     const config = {
       num: [2],
       rps: 0.9,
@@ -18,13 +20,12 @@ class Home extends React.Component {
       tha: [-50, 50],
       alpha: [0.5, 0],
       scale: [.05, .09],
-      body: icon,
+      body: gilded ? goldIcon : icon, 
       position: "all",
       cross: "bound",
       random: 1,
       g: 2,
     }; 
-    const { authed, myHighScores } = this.props;
     return (
       <Page>
         { authed && myHighScores === null ? <Col className="loader-container">

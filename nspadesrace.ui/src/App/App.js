@@ -29,6 +29,7 @@ class App extends React.Component {
     leaderboardScores: null,
     achievements: null,
     playerAchieved: null,
+    gilded: false,
   };
 
   componentDidMount() {
@@ -39,7 +40,7 @@ class App extends React.Component {
           this.setState({ firebaseUser: user, authed: true });          
         });         
       } else {
-        this.setState({ authed: false, player: null, firebaseUser: null, myHighScores: null, playerAchieved: null });
+        this.setState({ authed: false, player: null, firebaseUser: null, myHighScores: null, playerAchieved: null, gilded: false });
       }
     });
     this.getLeaderboard();
@@ -91,25 +92,33 @@ class App extends React.Component {
     .catch((error) => console.error("error getting player achieved achievements", error))
   };
 
+  updatePlayerAchieved = () => {
+    this.getPlayerAchieved(this.state.player.id);
+  };
+
   updateAppHighScores = () => {
     this.getPlayerHighScores(this.state.player.id);
     this.getLeaderboard();
- }  
+ }; 
 
   logOutUser = () => {
     authData.logOut();
   };
 
+  toggleGold = () => {
+    this.setState(prevState => ({ gilded: !prevState.gilded }));
+  }
+
   render() {
-    const { authed, player, leaderboardScores, myHighScores, achievements, playerAchieved } = this.state;
+    const { authed, player, leaderboardScores, myHighScores, achievements, playerAchieved, gilded } = this.state;
     return (  
       <Router>
         <Switch>          
           <Route path="/" exact render={() => (
-          <Home authed={authed} logOutUser={this.logOutUser} myHighScores={myHighScores} player={player} />
+          <Home authed={authed} logOutUser={this.logOutUser} myHighScores={myHighScores} player={player} gilded={gilded} />
            )} />
           <Route path="/game" render={() => (
-          <Game authed={authed} logOutUser={this.logOutUser} player={player} updateAppHighScores={this.updateAppHighScores} myHighScores={myHighScores}/>
+          <Game authed={authed} logOutUser={this.logOutUser} player={player} updateAppHighScores={this.updateAppHighScores} gilded={gilded} myHighScores={myHighScores} playerAchieved={playerAchieved} updatePlayerAchieved={this.updatePlayerAchieved}/>
            )} />
            <Route path="/scores" render={() => (
           <Scores authed={authed} player={player} logOutUser={this.logOutUser} leaderboardScores={leaderboardScores} myHighScores={myHighScores}/>
@@ -118,12 +127,12 @@ class App extends React.Component {
            {!authed ? (
               <Redirect to="/" authed={authed} logOutUser={this.logOutUser} player={player}/>
             ) : (
-              <Achievements authed={authed} player={player} logOutUser={this.logOutUser} achievements={achievements} playerAchieved={playerAchieved} />
+              <Achievements authed={authed} player={player} logOutUser={this.logOutUser} achievements={achievements} playerAchieved={playerAchieved} gilded={gilded} toggleGold={this.toggleGold} />
             )}
            </Route>     
           <Route path="/sign-up">
             {authed ? (
-              <Redirect to="/" authed={authed} logOutUser={this.logOutUser} player={player} myHighScores={myHighScores}/>
+              <Redirect to="/" authed={authed} logOutUser={this.logOutUser} player={player} gilded={gilded} myHighScores={myHighScores}/>
             ) : (
               <SignInSignUp></SignInSignUp>
             )}

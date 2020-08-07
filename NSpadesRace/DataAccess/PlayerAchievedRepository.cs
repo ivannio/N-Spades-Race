@@ -42,6 +42,51 @@ namespace NSpadesRace.DataAccess
             }
         }
 
+        public ScoreCount CheckConsistentlyQuick(int playerId)
+        {
+            var query = @"select count(*) as count
+                        from score 
+                        where raw < 90000
+                        and playerId = @playerId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { PlayerId = playerId };
+
+                return db.QueryFirst<ScoreCount>(query, parameters);
+            }
+        }
+
+        public ScoreCount CheckLeaderboardMaterial(int playerId)
+        {
+            var query = @"select count(*) as count
+                        from score 
+                        where raw < 45000
+                        and playerId = @playerId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { PlayerId = playerId };
+
+                return db.QueryFirst<ScoreCount>(query, parameters);
+            }
+        }
+
+        public ScoreCount CheckDoubleDigits(int playerId)
+        {
+            var query = @"select count(*) as count
+                            from score
+                            where playerId = @playerId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { PlayerId = playerId };
+
+                return db.QueryFirst<ScoreCount>(query, parameters);
+            }
+        }
+
+
         public PlayerAchieved Add(PlayerAchieved playerAchieved)
         {
             var sql = @"insert into playerAchieved(PlayerId, AchievementId)

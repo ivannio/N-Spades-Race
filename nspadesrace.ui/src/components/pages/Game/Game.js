@@ -18,6 +18,7 @@ import ParticlesBg from "particles-bg";
 import getCards from "../../../helpers/data/getCards";
 import Card from "../../shared/Card/Card";
 import scoreData from "../../../helpers/data/scoreData.js";
+import achievementData from '../../../helpers/data/achievementData.js';
 import "./Game.scss";
 
 class Game extends React.Component {
@@ -38,6 +39,8 @@ class Game extends React.Component {
     gameFinished: false,
   };
 
+  // G A M E  S E T U P
+
   componentDidMount() {
     this.getCards();
     this.setState({ loading: false });
@@ -47,6 +50,8 @@ class Game extends React.Component {
     const stack = getCards.getCards();
     this.setState({ stack });
   };
+
+  // G A M E  F U N C T I O N A L I T Y
 
   startTimer = () => {
     this.setState({
@@ -93,43 +98,7 @@ class Game extends React.Component {
     this.clearSelectedCard();
   };
 
-  addScore = (score) => {
-    scoreData
-      .addScore(score)
-      .then(() => this.props.updateAppHighScores())
-      .catch((error) => console.error("error adding score to db:", error));
-  };
-
-  firstWin = (time) => {
-    this.toaster(
-      `Finished in ${time}! Your first score has been saved. Visit your high scores page to see your 10 best and try to keep replacing them!`
-    );
-  };
-
-  newHighScore = (time) => {
-    this.toaster(`Nice job! ${time} is your new fastest time!`);
-  };
-
-  authWin = (time) => {
-    this.toaster(`Finished in ${time}!`);
-  };
-
-  noAuthWin = (time) => {
-    this.toaster(
-      `Finished in ${time}! Login or create an account to save your next time!`
-    );
-  };
-
-  closeToast = () => {
-    this.setState({ toastOpen: false, toastText: "" });
-  };
-
-  toaster = (text) => {
-    this.setState({ toastText: text, toastOpen: true });
-    setTimeout(() => {
-      this.closeToast();
-    }, 6000);
-  };
+  // P O S T - G A M E  F U N C T I O N A L I T Y  /  U P D A T E S
 
   finish = () => {
     this.stopTimer();
@@ -153,13 +122,90 @@ class Game extends React.Component {
         this.newHighScore(scoreToAdd.time);
       } else {
         this.authWin(scoreToAdd.time);
-      }
+      } 
     } else this.noAuthWin(formattedTime);
   };
 
-  openRules = () => {
-    this.setState({ rulesOpen: true });
+  addScore = (score) => {
+    scoreData
+      .addScore(score)
+      .then(() => this.props.updateAppHighScores())
+      .then(() => {if (this.props.playerAchieved.length !== 3) {
+        this.checkAchievements();
+      }})
+      .catch((error) => console.error("error adding score to db:", error));
   };
+
+  addPlayerAchieved = (achievementId) => {
+    const achievementToAdd = {
+      playerId: this.props.player.id,
+      achievementId,
+    }
+    achievementData.addPlayerAchieved(achievementToAdd)
+    .then(() => this.props.updatePlayerAchieved())
+    .catch((error) => console.error("error adding achieved achievement for player", error))
+  };
+
+  getAndCheckConsistentlyQuickResults = () => {
+    achievementData.checkConsistentlyQuick(this.props.player.id)
+    .then((response) => this.checkCQResults(response))
+    .catch((error) => console.error("error getting results for achievement", error))
+  }
+
+  checkCQResults = (count) => {
+    console.log("checked cq", count);
+    if (count.count > 4) {
+      this.addPlayerAchieved(2);
+      this.toaster("Achievement Unlocked! Finish in under 1:30 5 times");
+    }
+  }
+
+  getAndCheckDoubleDigitsResults = () => {
+    achievementData.checkDoubleDigits(this.props.player.id)
+    .then((response) => this.checkDDResults(response))
+    .catch((error) => console.error("error getting results for achievement", error))
+  }
+
+  checkDDResults = (count) => {
+    console.log("checked dd", count);
+    if (count.count > 9) {
+      this.addPlayerAchieved(3);
+      this.toaster("Achievement Unlocked! Finish 10 times");
+    }
+  }
+
+  getAndCheckLeaderboardMaterialResults = () => {
+    achievementData.checkLeaderboardMaterial(this.props.player.id)
+    .then((response) => this.checkLMResults(response))
+    .catch((error) => console.error("error getting results for achievement", error))
+  }
+
+  checkLMResults = (count) => {
+    console.log("checked lm", count.count);
+    if (count.count  > 0) {
+      this.addPlayerAchieved(4);
+      this.toaster("Achievement Unlocked! Finish in under 45 seconds");
+    }
+  }
+
+  checkAchievements = () => {
+    const { playerAchieved } = this.props;
+    let achievedIds = [];
+    playerAchieved.forEach((a) => {
+      achievedIds.push(a.id);
+    });
+    if (!achievedIds.includes(2)) {
+      this.getAndCheckConsistentlyQuickResults();
+    }
+    if (!achievedIds.includes(3)) {
+      this.getAndCheckDoubleDigitsResults();
+    }
+    if (!achievedIds.includes(4)) {
+      this.getAndCheckLeaderboardMaterialResults();
+    }
+  }
+
+  // P A G E  F U N C T I O N A L I T Y  /  U T I L I T Y
 
   resetGame = () => {
     this.stopTimer();
@@ -180,6 +226,41 @@ class Game extends React.Component {
     }, 1000);
   };
 
+  toaster = (text) => {
+    this.setState({ toastText: text, toastOpen: true });
+    setTimeout(() => {
+      this.closeToast();
+    }, 6000);
+  };
+
+  closeToast = () => {
+    this.setState({ toastOpen: false, toastText: "" });
+  };
+
+  firstWin = (time) => {
+    this.toaster(
+      `Finished in ${time}! Your first score has been saved. Visit your high scores page to see your 10 best and try to keep replacing them!`
+    );
+  };
+
+  newHighScore = (time) => {
+    this.toaster(`Nice job! ${time} is your new fastest time!`);
+  };
+
+  authWin = (time) => {
+    this.toaster(`Finished in ${time}!`);
+  };
+
+  noAuthWin = (time) => {
+    this.toaster(
+      `Finished in ${time}! Login or create an account to save your next time!`
+    );
+  };
+
+  openRules = () => {
+    this.setState({ rulesOpen: true });
+  };
+
   closeRules = () => {
     this.setState({ rulesOpen: false });
   };
@@ -198,7 +279,7 @@ class Game extends React.Component {
       rulesOpen,
       gameFinished,
     } = this.state;
-    const { authed, player } = this.props;
+    const { authed, player, gilded } = this.props;
     const rowOne = stack.slice(0, 6);
     const rowTwo = stack.slice(6, 12);
     const rowThree = stack.slice(12, 18);
@@ -238,7 +319,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowOne.map((card) => (
                 <Card
-                  player={player}
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -255,7 +336,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowTwo.map((card) => (
                 <Card
-                  player={player}
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -272,7 +353,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowThree.map((card) => (
                 <Card
-                  player={player}
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -289,7 +370,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowFour.map((card) => (
                 <Card
-                  player={player}
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -306,7 +387,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowFive.map((card) => (
                 <Card
-                  player={player}
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -323,7 +404,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowSix.map((card) => (
                 <Card
-                  player={player}
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
