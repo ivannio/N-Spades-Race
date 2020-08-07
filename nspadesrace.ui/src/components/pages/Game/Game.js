@@ -41,14 +41,19 @@ class Game extends React.Component {
 
   // G A M E  S E T U P
 
-  componentDidMount() {
+  componentDidMount() { 
     this.getCards();
     this.setState({ loading: false });
   }
 
   getCards = () => {
-    const stack = getCards.getCards();
-    this.setState({ stack });
+    if (this.props.player.userName.startsWith("ezm0de")) {
+      const stack = getCards.getEasyCards();
+      this.setState({ stack });
+    } else {
+      const stack = getCards.getCards();
+      this.setState({ stack });
+    }  
   };
 
   // G A M E  F U N C T I O N A L I T Y

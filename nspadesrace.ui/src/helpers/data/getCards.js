@@ -21,7 +21,7 @@ const cards = [
     },    
     {
         "id": 6,
-        "value": 'flower'
+        "value": 'mushroom'
     },
     {
         "id": 7,
@@ -41,11 +41,11 @@ const cards = [
     },
     {
         "id": 11,
-        "value": 'oneup'
+        "value": 'flower'
     },
     {
         "id": 12,
-        "value": 'oneup'
+        "value": 'flower'
     },
     {
         "id": 13,
@@ -61,15 +61,15 @@ const cards = [
     },
     {
         "id": 16,
-        "value": 'star'
+        "value": 'oneup'
     },
     {
         "id": 17,
-        "value": 'star'
+        "value": 'oneup'
     },
     {
         "id": 18,
-        "value": 'star'
+        "value": 'oneup'
     },
     {
         "id": 19,
@@ -81,19 +81,19 @@ const cards = [
     },
     {
         "id": 21,
-        "value": 'tencoin'
+        "value": 'star'
     },
     {
         "id": 22,
-        "value": 'tencoin'
+        "value": 'star'
     },
     {
         "id": 23,
-        "value": 'tencoin'
+        "value": 'star'
     },
     {
         "id": 24,
-        "value": 'tencoin'
+        "value": 'star'
     },
     {
         "id": 25,
@@ -101,43 +101,43 @@ const cards = [
     },
     {
         "id": 26,
-        "value": 'twentycoin'
+        "value": 'tencoin'
     },
     {
         "id": 27,
-        "value": 'twentycoin'
+        "value": 'tencoin'
     },
     {
         "id": 28,
-        "value": 'twentycoin'
+        "value": 'tencoin'
     },
     {
         "id": 29,
-        "value": 'twentycoin'
+        "value": 'tencoin'
     },
     {
         "id": 30,
-        "value": 'twentycoin'
+        "value": 'tencoin'
     },
     {
         "id": 31,
-        "value": 'mushroom'
+        "value": 'twentycoin'
     },
     {
         "id": 32,
-        "value": 'flower'
+        "value": 'twentycoin'
     },
     {
         "id": 33,
-        "value": 'star'
+        "value": 'twentycoin'
     },
     {
         "id": 34,
-        "value": 'oneup'
+        "value": 'twentycoin'
     },
     {
         "id": 35,
-        "value": 'tencoin'
+        "value": 'twentycoin'
     },
     {
         "id": 36,
@@ -155,4 +155,6 @@ const shuffle = (arr) => {
 
 const getCards = () => shuffle(cards);
 
-export default { getCards };
+const getEasyCards = () => cards;
+
+export default { getCards, getEasyCards };
