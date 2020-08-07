@@ -18,6 +18,7 @@ import ParticlesBg from "particles-bg";
 import getCards from "../../../helpers/data/getCards";
 import Card from "../../shared/Card/Card";
 import scoreData from "../../../helpers/data/scoreData.js";
+import achievementData from '../../../helpers/data/achievementData.js';
 import "./Game.scss";
 
 class Game extends React.Component {
@@ -38,29 +39,19 @@ class Game extends React.Component {
     gameFinished: false,
   };
 
+  // G A M E  S E T U P
+
   componentDidMount() {
     this.getCards();
     this.setState({ loading: false });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.player !== prevProps.player) {
-      if (this.props.player.id !== undefined)
-        this.getHighScore(this.props.player);
-    }
-  }
-
-  getHighScore = (player) => {
-    scoreData
-      .getHighestScoreByPlayerId(player.id)
-      .then((response) => this.setState({ highScore: response }))
-      .catch((error) => console.error("error getting high score", error));
-  };
-
   getCards = () => {
     const stack = getCards.getCards();
     this.setState({ stack });
   };
+
+  // G A M E  F U N C T I O N A L I T Y
 
   startTimer = () => {
     this.setState({
@@ -107,43 +98,7 @@ class Game extends React.Component {
     this.clearSelectedCard();
   };
 
-  addScore = (score) => {
-    scoreData
-      .addScore(score)
-      .then(() => this.props.updateAppHighScores())
-      .catch((error) => console.error("error adding score to db:", error));
-  };
-
-  firstWin = (time) => {
-    this.toaster(
-      `Finished in ${time}! Your first score has been saved. Visit your high scores page to see your 10 best and try to keep replacing them!`
-    );
-  };
-
-  newHighScore = (time) => {
-    this.toaster(`Nice job! ${time} is your new fastest time!`);
-  };
-
-  authWin = (time) => {
-    this.toaster(`Finished in ${time}!`);
-  };
-
-  noAuthWin = (time) => {
-    this.toaster(
-      `Finished in ${time}! Login or create an account to save your next time!`
-    );
-  };
-
-  closeToast = () => {
-    this.setState({ toastOpen: false, toastText: "" });
-  };
-
-  toaster = (text) => {
-    this.setState({ toastText: text, toastOpen: true });
-    setTimeout(() => {
-      this.closeToast();
-    }, 7000);
-  };
+  // P O S T - G A M E  F U N C T I O N A L I T Y  /  U P D A T E S
 
   finish = () => {
     this.stopTimer();
@@ -167,13 +122,90 @@ class Game extends React.Component {
         this.newHighScore(scoreToAdd.time);
       } else {
         this.authWin(scoreToAdd.time);
-      }
+      } 
     } else this.noAuthWin(formattedTime);
   };
 
-  openRules = () => {
-    this.setState({ rulesOpen: true });
+  addScore = (score) => {
+    scoreData
+      .addScore(score)
+      .then(() => this.props.updateAppHighScores())
+      .then(() => {if (this.props.playerAchieved.length !== 3) {
+        this.checkAchievements();
+      }})
+      .catch((error) => console.error("error adding score to db:", error));
   };
+
+  addPlayerAchieved = (achievementId) => {
+    const achievementToAdd = {
+      playerId: this.props.player.id,
+      achievementId,
+    }
+    achievementData.addPlayerAchieved(achievementToAdd)
+    .then(() => this.props.updatePlayerAchieved())
+    .catch((error) => console.error("error adding achieved achievement for player", error))
+  };
+
+  getAndCheckConsistentlyQuickResults = () => {
+    achievementData.checkConsistentlyQuick(this.props.player.id)
+    .then((response) => this.checkCQResults(response))
+    .catch((error) => console.error("error getting results for achievement", error))
+  }
+
+  checkCQResults = (count) => {
+    console.log("checked cq", count);
+    if (count.count > 4) {
+      this.addPlayerAchieved(2);
+      this.toaster("Achievement Unlocked! Finish in under 1:30 5 times");
+    }
+  }
+
+  getAndCheckDoubleDigitsResults = () => {
+    achievementData.checkDoubleDigits(this.props.player.id)
+    .then((response) => this.checkDDResults(response))
+    .catch((error) => console.error("error getting results for achievement", error))
+  }
+
+  checkDDResults = (count) => {
+    console.log("checked dd", count);
+    if (count.count > 9) {
+      this.addPlayerAchieved(3);
+      this.toaster("Achievement Unlocked! Finish 10 times");
+    }
+  }
+
+  getAndCheckLeaderboardMaterialResults = () => {
+    achievementData.checkLeaderboardMaterial(this.props.player.id)
+    .then((response) => this.checkLMResults(response))
+    .catch((error) => console.error("error getting results for achievement", error))
+  }
+
+  checkLMResults = (count) => {
+    console.log("checked lm", count.count);
+    if (count.count  > 0) {
+      this.addPlayerAchieved(4);
+      this.toaster("Achievement Unlocked! Finish in under 45 seconds");
+    }
+  }
+
+  checkAchievements = () => {
+    const { playerAchieved } = this.props;
+    let achievedIds = [];
+    playerAchieved.forEach((a) => {
+      achievedIds.push(a.id);
+    });
+    if (!achievedIds.includes(2)) {
+      this.getAndCheckConsistentlyQuickResults();
+    }
+    if (!achievedIds.includes(3)) {
+      this.getAndCheckDoubleDigitsResults();
+    }
+    if (!achievedIds.includes(4)) {
+      this.getAndCheckLeaderboardMaterialResults();
+    }
+  }
+
+  // P A G E  F U N C T I O N A L I T Y  /  U T I L I T Y
 
   resetGame = () => {
     this.stopTimer();
@@ -194,6 +226,41 @@ class Game extends React.Component {
     }, 1000);
   };
 
+  toaster = (text) => {
+    this.setState({ toastText: text, toastOpen: true });
+    setTimeout(() => {
+      this.closeToast();
+    }, 6000);
+  };
+
+  closeToast = () => {
+    this.setState({ toastOpen: false, toastText: "" });
+  };
+
+  firstWin = (time) => {
+    this.toaster(
+      `Finished in ${time}! Your first score has been saved. Visit your high scores page to see your 10 best and try to keep replacing them!`
+    );
+  };
+
+  newHighScore = (time) => {
+    this.toaster(`Nice job! ${time} is your new fastest time!`);
+  };
+
+  authWin = (time) => {
+    this.toaster(`Finished in ${time}!`);
+  };
+
+  noAuthWin = (time) => {
+    this.toaster(
+      `Finished in ${time}! Login or create an account to save your next time!`
+    );
+  };
+
+  openRules = () => {
+    this.setState({ rulesOpen: true });
+  };
+
   closeRules = () => {
     this.setState({ rulesOpen: false });
   };
@@ -212,7 +279,7 @@ class Game extends React.Component {
       rulesOpen,
       gameFinished,
     } = this.state;
-    const { authed, player } = this.props;
+    const { authed, player, gilded } = this.props;
     const rowOne = stack.slice(0, 6);
     const rowTwo = stack.slice(6, 12);
     const rowThree = stack.slice(12, 18);
@@ -252,6 +319,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowOne.map((card) => (
                 <Card
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -268,6 +336,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowTwo.map((card) => (
                 <Card
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -284,6 +353,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowThree.map((card) => (
                 <Card
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -300,6 +370,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowFour.map((card) => (
                 <Card
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -316,6 +387,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowFive.map((card) => (
                 <Card
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -332,6 +404,7 @@ class Game extends React.Component {
             <Row className="card-row">
               {rowSix.map((card) => (
                 <Card
+                  gilded={gilded}
                   nonMatches={nonMatches}
                   matches={matches}
                   handleMatch={this.handleMatch}
@@ -366,15 +439,30 @@ class Game extends React.Component {
           )}
 
           <div className="game-bar-right">
-            {timerOn || gameFinished ? (
+            { timerOn ? (
               <Button
                 onClick={this.resetGame}
                 modifier="material"
                 className="reset-button"
               >
                 Reset
-              </Button>
-            ) : (
+              </Button> )
+            : (  gameFinished ? <>
+              <Button
+                onClick={this.resetGame}
+                modifier="material"
+                className="primary-button"
+              >
+                Play Again
+              </Button>    
+                <Link
+                  className="button--material button custom-button"
+                  style={{ textDecoration: "none" }}
+                  to={"/scores"}
+                >
+                  High Scores
+                </Link>    
+            </> :  
               <>
                 <Button
                   onClick={this.openRules}
@@ -382,61 +470,42 @@ class Game extends React.Component {
                   className="custom-button"
                 >
                   How To Play
-                </Button>
-
-                {authed ? (
-                  <Button className="custom-button" modifier="material">
-                    <Link
-                      className="custom-button"
-                      style={{ textDecoration: "none" }}
-                      to={"/"}
-                    >
-                      Home
-                    </Link>
-                  </Button>
-                ) : (
-                  <Button className="custom-button" modifier="material">
-                    <Link
-                      className="custom-button"
-                      style={{ textDecoration: "none" }}
-                      to={"/sign-up"}
-                    >
-                      Login / Create Account
-                    </Link>
-                  </Button>
-                )}
+                </Button>    
+                  <Link
+                    className="button--material button custom-button"
+                    style={{ textDecoration: "none" }}
+                    to={"/"}
+                  >
+                    Home
+                  </Link>    
               </>
             )}
           </div>
         </BottomToolbar>
         {rulesOpen ? (
-          <AlertDialog isOpen={true} onCancel={this.closeRules} cancelable>
+          <AlertDialog modifier="material" isOpen={true} onCancel={this.closeRules} cancelable>
             <div className="alert-dialog-title">How To Play</div>
             <div className="alert-dialog-content">
-              --Tap a card to flip it over and reveal the face value
-              <br />
-              --Time will start as soon as the first card's face is shown
-              <br />
-              --Flip over another card. If it matches the first card, both cards will remain
-              flipped
-              <br />
-              --If the cards do not match, both cards will flip back over.
-              <br />
-              --Find all of the matches to win!
+              <p>Tap a card to flip it over and reveal the face value</p>      
+              <p>Time will start as soon as the first card's face is shown</p>
+              <p>Tap to flip another card; If it matches the first, both cards
+                    will remain flipped</p>
+              <p>If the cards do not match, both cards will flip back over</p>
+              <p>Find all of the matches as fast as possible!</p>     
             </div>
             <div className="alert-dialog-footer">
               <AlertDialogButton
+                modifier="material"
                 onClick={this.closeRules}
                 className="alert-dialog-button"
               >
-                OK!
+                got it!
               </AlertDialogButton>
             </div>
           </AlertDialog>
         ) : (
           <></>
         )}
-
         {gameFinished ? <ParticlesBg type="lines" bg={true} /> : <></>}
       </Page>
     );

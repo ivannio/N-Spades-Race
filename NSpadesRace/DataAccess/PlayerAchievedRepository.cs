@@ -26,20 +26,66 @@ namespace NSpadesRace.DataAccess
             }
         }
 
-        public PlayerAchieved GetById(int id)
+        public IEnumerable<Achievement> GetByPlayerId(int playerId)
         {
-            var query = @"select *
-                          from playerAchieved
-                          where id = @id";
+            var query = @"select achievement.id, achievement.title, achievement.description
+                            from playerAchieved
+                            join achievement on achievement.id = playerachieved.achievementid
+                            where playerId = @playerId";
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                var parameters = new { Id = id };
+                var parameters = new { PlayerId = playerId };
 
-                var playerAchieved = db.QueryFirstOrDefault<PlayerAchieved>(query, parameters);
-                return playerAchieved;
+                return db.Query<Achievement>(query, parameters);
+
             }
         }
+
+        public ScoreCount CheckConsistentlyQuick(int playerId)
+        {
+            var query = @"select count(*) as count
+                        from score 
+                        where raw < 90000
+                        and playerId = @playerId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { PlayerId = playerId };
+
+                return db.QueryFirst<ScoreCount>(query, parameters);
+            }
+        }
+
+        public ScoreCount CheckLeaderboardMaterial(int playerId)
+        {
+            var query = @"select count(*) as count
+                        from score 
+                        where raw < 45000
+                        and playerId = @playerId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { PlayerId = playerId };
+
+                return db.QueryFirst<ScoreCount>(query, parameters);
+            }
+        }
+
+        public ScoreCount CheckDoubleDigits(int playerId)
+        {
+            var query = @"select count(*) as count
+                            from score
+                            where playerId = @playerId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { PlayerId = playerId };
+
+                return db.QueryFirst<ScoreCount>(query, parameters);
+            }
+        }
+
 
         public PlayerAchieved Add(PlayerAchieved playerAchieved)
         {

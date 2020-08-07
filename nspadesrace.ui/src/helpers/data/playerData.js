@@ -38,9 +38,16 @@ const registerFirebaseAndDBUser = (email, passWord, userName) => {
         };
         addNewPlayer(playerToAdd);
       });
-    });
+    })
+    .catch((error) => error);
 };
 
-const addNewPlayer = (user) => axios.post(`${baseUrl}/player`, user);
+const addNewPlayer = (user) =>
+  new Promise((resolve, reject) => {
+    axios
+      .post(`${baseUrl}/player`, user)
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error));
+  }); 
 
 export default { registerFirebaseAndDBUser, getPlayerByFirebaseUid, addNewPlayer };

@@ -13,5 +13,6 @@ namespace NSpadesRace.Models
         public bool AcctActive { get; set; }
         public string FireBaseUid { get; set; }
         public string Email { get; set; }
+        public bool Gilded { get; set; }
     }
 }

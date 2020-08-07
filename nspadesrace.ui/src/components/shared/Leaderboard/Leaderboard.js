@@ -3,7 +3,7 @@ import {
   Page,
   List,
 } from "react-onsenui";
-import ParticlesBg from "particles-bg";
+import ParticlesBg from 'particles-bg';
 import "onsenui/css/onsenui.css";
 import "onsenui/css/onsen-css-components.css";
 
@@ -12,7 +12,9 @@ class Leaderboard extends React.Component {
   render() {
     const { leaderboardScores, player } = this.props;    
     return (    
-      <Page className="score-page">
+      <Page
+      > 
+      <ParticlesBg type="square" bg={true} num={3}></ParticlesBg>       
           { leaderboardScores === null ? <></> :
           <List modifier="material" className="leaderboard-list">
               <div className="leaderboard-title">Top 10 Scores</div>
@@ -41,8 +43,7 @@ class Leaderboard extends React.Component {
                     {score.time}
                     </div>
                     </div>)} 
-             </List> }
-             <ParticlesBg type="polygon" bg={true} num={1}></ParticlesBg>                  
+             </List>}                                
         </Page> 
     );  }
 }

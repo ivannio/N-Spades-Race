@@ -1,9 +1,18 @@
 .home-header-column {
     display: flex;
     flex-direction: column;
-    height: 40%;
-    padding: 2em 2em 1em;
+    height: 55%;
+    padding: 2.6em;
     justify-content: center;
+}
+
+.mixnmatch-logo {
+    height: 100%;
+    width: auto;
+    background-image: url("https://raw.githubusercontent.com/ivannio/N-Spades-Race/master/nspadesrace.ui/src/assets/images/mixnmatchlogoyellow.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
 }
 
 .home-row {
@@ -12,15 +21,8 @@
     margin-right: auto;
 }
 
-.home-header {
-    font-family: 'Rowdies', cursive !important;
-    font-size: 55px !important;
-    text-align: center;
-    color: #c7ccdb;
-}
-
 .home-buttons-column {
-    height: 60%;
+    height: 45%;
     padding: 0em 3em 3em;
 }
 
@@ -34,7 +36,7 @@
 .or::before, .or::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid #c7ccdb;
+    border-bottom: 1px solid #ffffff;
 }
 .or::before {
     margin-right: .25em;
@@ -52,20 +54,29 @@
     font-weight: bold;
 }
 
+.primary-button {
+    background-color: #56876D;
+    text-align: center;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+}
+
 .logout-fab {
-    background-color: #6290c8 !important;
+    background-color: rgba(17, 59, 94, 1) !important;
 }
 
 .logout-fab-icon {
-    color: black !important;
+    color: #E9C46A !important;
 }
 
 .logout-fab-label {
-    color: #c7ccdb;
+    font-family: 'Rowdies', cursive !important;
     font-size: 1em;
-    top: 21px;
+    top: 19px;
     bottom: auto;
-    right: 70px;
+    right: 66px;
     left: auto;
     position: absolute;
 }

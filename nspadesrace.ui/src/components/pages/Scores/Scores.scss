@@ -3,18 +3,47 @@
    background-color: #0116279d;
 }
 
+.leaderboard-list-not-authed {
+    background-color: #0116278a;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.leaderboard-title {
+    font-weight: normal;
+    padding: 0.3em 1em;
+    font-size: 2em;
+    text-align: center;
+    font-family: 'Rowdies', cursive;
+}
+
+.leaderboard-title-not-authed {
+    font-weight: normal;
+    padding: 0em 1em 1em 1em;
+    font-size: 2.5em;
+    text-align: center;
+    font-family: 'Rowdies', cursive;
+}
+
+.scores-sign-up-link {
+    text-decoration: none;
+    color: #E9C46A;
+}
+
 .leaderboard-row {
     display: flex;
     justify-content: space-between;
     margin-left: 2em;
     padding: 0.8em 1em 0.8em 0em;
-    border-bottom: 1px solid #a3cef1d2; 
+    border-bottom: 2px solid #a3cef1; 
 }
 
 .personal-score-legend {
     margin-right: 1em;
     margin-left: 1em;
-    padding: 1em 1em 0.6em;
+    padding: 0.6em 1em;
     border-bottom: 1px solid #E9C46A;
     display: flex;
     justify-content: space-around;
@@ -25,20 +54,13 @@
     justify-content: space-around;
     margin-right: 2em;
     padding: 0.8em 0em;
-    border-bottom: 1px solid #a3cef1; 
-}
-
-.leaderboard-title {
-    padding: 1em 1em 0.3em;
-    font-size: 2em;
-    text-align: center;
-    font-family: 'Rowdies', cursive;
+    border-bottom: 2px solid #a3cef1; 
 }
 
 .leaderboard-legend {
     margin-right: 1em;
     margin-left: 1em;
-    padding: 1em 1em 0.6em;
+    padding: 0.6em 1em;
     border-bottom: 1px solid #E9C46A;
     display: flex;
     justify-content: space-between;
@@ -69,7 +91,7 @@
 }
 
 .bottom-score-toolbar {
-    margin-bottom: 1em;
+    background-color: #113b5e;
     display: flex;
     justify-content: space-around;    
 }

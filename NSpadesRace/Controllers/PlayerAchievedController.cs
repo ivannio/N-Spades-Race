@@ -27,12 +27,32 @@ namespace NSpadesRace.Controllers
             return Ok(allPlayerAchieved);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetPlayerAchievedById(int id)
+        [HttpGet("{playerId}")]
+        public IActionResult GetAchievedByPlayerId(int playerId)
         {
-            var playerAchieved = _repository.GetById(id);
-            if (playerAchieved == null) return NotFound("No playerAchieved with that id could be found.");
+            var playerAchieved = _repository.GetByPlayerId(playerId);            
             return Ok(playerAchieved);
+        }
+
+        [HttpGet("checkcq/{playerId}")]
+        public IActionResult CheckConsistentlyQuick(int playerId)
+        {
+            var count = _repository.CheckConsistentlyQuick(playerId);
+            return Ok(count);
+        }
+
+        [HttpGet("checkdd/{playerId}")]
+        public IActionResult CheckDoubleDigits(int playerId)
+        {
+            var count = _repository.CheckDoubleDigits(playerId);
+            return Ok(count);
+        }
+
+        [HttpGet("checklm/{playerId}")]
+        public IActionResult CheckLeaderboardMaterial(int playerId)
+        {
+            var count = _repository.CheckLeaderboardMaterial(playerId);
+            return Ok(count);
         }
 
         [HttpPost]

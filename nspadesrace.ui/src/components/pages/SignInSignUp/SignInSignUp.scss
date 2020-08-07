@@ -3,17 +3,16 @@
 
 .header-column {
     display: flex;
-    flex-direction: column;
     height: 30%;
-    padding: 3em 3em 1em;
+    flex-direction: column;
+    padding: 2em 3em 1em;
     justify-content: center;
 }
 
 .auth-header {
     font-family: 'Rowdies', cursive !important;
-    font-size: 55px !important;
+    font-size: 45px !important;
     text-align: center;
-    color: #c7ccdb;
 }
 
 .auth-column {
@@ -34,23 +33,4 @@
     margin-right: auto;
     color: black !important;
     font-weight: bold;
-}
-
-.home-fab {
-    background-color: #6290c8 !important;
-}
-
-.fab-icon {
-    color: black !important;
-}
-
-.home-fab-label {
-    color: #c7ccdb;
-    font-size: 1em;
-    top: auto;
-    bottom: 20px;
-    right: 70px;
-    left: auto;
-    position: absolute;
-    z-index: 2;
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import {
   Page,
   List,
@@ -11,8 +12,9 @@ class MyHighScores extends React.Component {
   render() {
     const { player, authed, myHighScores } = this.props;   
     return (    
-      <Page className="score-page">
-          { authed && myHighScores !== null ? <List modifier="material" className="leaderboard-list">
+      <Page
+        > <ParticlesBg type="polygon" bg={true} num={1}></ParticlesBg>
+          { authed ? <List modifier="material" className="leaderboard-list">
               <div className="leaderboard-title">{player.userName}'s Top Scores</div>
               <div className="personal-score-legend">     
                 <div className='score-player-legend'>
@@ -31,9 +33,8 @@ class MyHighScores extends React.Component {
                     {score.dateRecorded.slice(5, 10).replace("-", " / ")}
                     </div>
                     </div>)} 
-             </List> : <>prolly need to log in homie</>
-           }
-             <ParticlesBg type="square" bg={true} num={2}></ParticlesBg>                  
+             </List> : <List modifier="material" className="leaderboard-list-not-authed"><div className="leaderboard-title-not-authed"><Link to={"/sign-up"} className="scores-sign-up-link">Login</Link> or <Link to={"/sign-up"} className="scores-sign-up-link">create an account</Link> to save your best times</div></List>
+           }                           
         </Page> 
     );  }
 }
