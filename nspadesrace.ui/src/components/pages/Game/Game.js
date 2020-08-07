@@ -47,7 +47,7 @@ class Game extends React.Component {
   }
 
   getCards = () => {
-    if (this.props.player.userName.startsWith("ezm0de")) {
+    if (this.props.authed && this.props.player.userName.startsWith("ezm0de")) {
       const stack = getCards.getEasyCards();
       this.setState({ stack });
     } else {
