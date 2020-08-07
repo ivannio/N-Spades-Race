@@ -24,7 +24,7 @@ class Achievements extends React.Component {
   };
 
   componentDidMount() {
-    const { achievements, playerAchieved, gilded } = this.props;
+    const { achievements, playerAchieved } = this.props;
     let achievedIds = [];
     playerAchieved.forEach((a) => {
       achievedIds.push(a.id);
