@@ -18,7 +18,7 @@ import ParticlesBg from "particles-bg";
 import getCards from "../../../helpers/data/getCards";
 import Card from "../../shared/Card/Card";
 import scoreData from "../../../helpers/data/scoreData.js";
-import achievementData from '../../../helpers/data/achievementData.js';
+import achievementData from "../../../helpers/data/achievementData.js";
 import "./Game.scss";
 
 class Game extends React.Component {
@@ -41,19 +41,24 @@ class Game extends React.Component {
 
   // G A M E  S E T U P
 
-  componentDidMount() { 
+  componentDidMount() {
+    const { authed, player } = this.props;
+    if (authed && player.userName.startsWith("ezm0de")) {
+      this.easyModeCards();
+      this.setState({ loading: false });
+    } else
     this.getCards();
     this.setState({ loading: false });
   }
 
+  easyModeCards = () => {
+    const stack = getCards.cards;
+    this.setState({ stack });
+  };
+
   getCards = () => {
-    if (this.props.authed && this.props.player.userName.startsWith("ezm0de")) {
-      const stack = getCards.getEasyCards();
-      this.setState({ stack });
-    } else {
-      const stack = getCards.getCards();
-      this.setState({ stack });
-    }  
+    const stack = getCards.getCards();
+    this.setState({ stack });
   };
 
   // G A M E  F U N C T I O N A L I T Y
@@ -127,7 +132,7 @@ class Game extends React.Component {
         this.newHighScore(scoreToAdd.time);
       } else {
         this.authWin(scoreToAdd.time);
-      } 
+      }
     } else this.noAuthWin(formattedTime);
   };
 
@@ -135,9 +140,11 @@ class Game extends React.Component {
     scoreData
       .addScore(score)
       .then(() => this.props.updateAppHighScores())
-      .then(() => {if (this.props.playerAchieved.length !== 3) {
-        this.checkAchievements();
-      }})
+      .then(() => {
+        if (this.props.playerAchieved.length !== 3) {
+          this.checkAchievements();
+        }
+      })
       .catch((error) => console.error("error adding score to db:", error));
   };
 
@@ -145,17 +152,23 @@ class Game extends React.Component {
     const achievementToAdd = {
       playerId: this.props.player.id,
       achievementId,
-    }
-    achievementData.addPlayerAchieved(achievementToAdd)
-    .then(() => this.props.updatePlayerAchieved())
-    .catch((error) => console.error("error adding achieved achievement for player", error))
+    };
+    achievementData
+      .addPlayerAchieved(achievementToAdd)
+      .then(() => this.props.updatePlayerAchieved())
+      .catch((error) =>
+        console.error("error adding achieved achievement for player", error)
+      );
   };
 
   getAndCheckConsistentlyQuickResults = () => {
-    achievementData.checkConsistentlyQuick(this.props.player.id)
-    .then((response) => this.checkCQResults(response))
-    .catch((error) => console.error("error getting results for achievement", error))
-  }
+    achievementData
+      .checkConsistentlyQuick(this.props.player.id)
+      .then((response) => this.checkCQResults(response))
+      .catch((error) =>
+        console.error("error getting results for achievement", error)
+      );
+  };
 
   checkCQResults = (count) => {
     console.log("checked cq", count);
@@ -163,13 +176,16 @@ class Game extends React.Component {
       this.addPlayerAchieved(2);
       this.toaster("Achievement Unlocked! Finish in under 1:30 5 times");
     }
-  }
+  };
 
   getAndCheckDoubleDigitsResults = () => {
-    achievementData.checkDoubleDigits(this.props.player.id)
-    .then((response) => this.checkDDResults(response))
-    .catch((error) => console.error("error getting results for achievement", error))
-  }
+    achievementData
+      .checkDoubleDigits(this.props.player.id)
+      .then((response) => this.checkDDResults(response))
+      .catch((error) =>
+        console.error("error getting results for achievement", error)
+      );
+  };
 
   checkDDResults = (count) => {
     console.log("checked dd", count);
@@ -177,21 +193,24 @@ class Game extends React.Component {
       this.addPlayerAchieved(3);
       this.toaster("Achievement Unlocked! Finish 10 times");
     }
-  }
+  };
 
   getAndCheckLeaderboardMaterialResults = () => {
-    achievementData.checkLeaderboardMaterial(this.props.player.id)
-    .then((response) => this.checkLMResults(response))
-    .catch((error) => console.error("error getting results for achievement", error))
-  }
+    achievementData
+      .checkLeaderboardMaterial(this.props.player.id)
+      .then((response) => this.checkLMResults(response))
+      .catch((error) =>
+        console.error("error getting results for achievement", error)
+      );
+  };
 
   checkLMResults = (count) => {
     console.log("checked lm", count.count);
-    if (count.count  > 0) {
+    if (count.count > 0) {
       this.addPlayerAchieved(4);
       this.toaster("Achievement Unlocked! Finish in under 45 seconds");
     }
-  }
+  };
 
   checkAchievements = () => {
     const { playerAchieved } = this.props;
@@ -208,7 +227,7 @@ class Game extends React.Component {
     if (!achievedIds.includes(4)) {
       this.getAndCheckLeaderboardMaterialResults();
     }
-  }
+  };
 
   // P A G E  F U N C T I O N A L I T Y  /  U T I L I T Y
 
@@ -226,6 +245,10 @@ class Game extends React.Component {
       matches: 0,
     });
     setTimeout(() => {
+      if (this.props.authed && this.props.player.userName.startsWith("ezm0de")) {
+        this.easyModeCards();
+        this.setState({ loading: false });
+      } else
       this.getCards();
       this.setState({ loading: false });
     }, 1000);
@@ -444,30 +467,32 @@ class Game extends React.Component {
           )}
 
           <div className="game-bar-right">
-            { timerOn ? (
+            {timerOn ? (
               <Button
                 onClick={this.resetGame}
                 modifier="material"
                 className="reset-button"
               >
                 Reset
-              </Button> )
-            : (  gameFinished ? <>
-              <Button
-                onClick={this.resetGame}
-                modifier="material"
-                className="primary-button"
-              >
-                Play Again
-              </Button>    
+              </Button>
+            ) : gameFinished ? (
+              <>
+                <Button
+                  onClick={this.resetGame}
+                  modifier="material"
+                  className="primary-button"
+                >
+                  Play Again
+                </Button>
                 <Link
                   className="button--material button custom-button"
                   style={{ textDecoration: "none" }}
                   to={"/scores"}
                 >
                   High Scores
-                </Link>    
-            </> :  
+                </Link>
+              </>
+            ) : (
               <>
                 <Button
                   onClick={this.openRules}
@@ -475,28 +500,35 @@ class Game extends React.Component {
                   className="custom-button"
                 >
                   How To Play
-                </Button>    
-                  <Link
-                    className="button--material button custom-button"
-                    style={{ textDecoration: "none" }}
-                    to={"/"}
-                  >
-                    Home
-                  </Link>    
+                </Button>
+                <Link
+                  className="button--material button custom-button"
+                  style={{ textDecoration: "none" }}
+                  to={"/"}
+                >
+                  Home
+                </Link>
               </>
             )}
           </div>
         </BottomToolbar>
         {rulesOpen ? (
-          <AlertDialog modifier="material" isOpen={true} onCancel={this.closeRules} cancelable>
+          <AlertDialog
+            modifier="material"
+            isOpen={true}
+            onCancel={this.closeRules}
+            cancelable
+          >
             <div className="alert-dialog-title">How To Play</div>
             <div className="alert-dialog-content">
-              <p>Tap a card to flip it over and reveal the face value</p>      
+              <p>Tap a card to flip it over and reveal the face value</p>
               <p>Time will start as soon as the first card's face is shown</p>
-              <p>Tap to flip another card; If it matches the first, both cards
-                    will remain flipped</p>
+              <p>
+                Tap to flip another card; If it matches the first, both cards
+                will remain flipped
+              </p>
               <p>If the cards do not match, both cards will flip back over</p>
-              <p>Find all of the matches as fast as possible!</p>     
+              <p>Find all of the matches as fast as possible!</p>
             </div>
             <div className="alert-dialog-footer">
               <AlertDialogButton

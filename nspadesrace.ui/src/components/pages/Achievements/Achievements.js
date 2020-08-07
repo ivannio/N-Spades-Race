@@ -35,8 +35,7 @@ class Achievements extends React.Component {
     this.setState({ notAchieved });
   }
 
-  handleClick = (e) => {
-    e.preventDefault();
+  handleClick = () => {    
     this.props.toggleGold();
   };
 
@@ -138,7 +137,7 @@ class Achievements extends React.Component {
                   icon="fa-lock-open"
                 ></Icon>
               </div>
-              <div className="center">Tap to toggle gold cards!</div>
+              <div className="center">Tap the card below to toggle gold cards!</div>
             </ListItem>
           ) : (
             <ListItem

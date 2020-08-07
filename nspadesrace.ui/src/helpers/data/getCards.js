@@ -155,6 +155,4 @@ const shuffle = (arr) => {
 
 const getCards = () => shuffle(cards);
 
-const getEasyCards = () => cards;
-
-export default { getCards, getEasyCards };
+export default { getCards, cards };
