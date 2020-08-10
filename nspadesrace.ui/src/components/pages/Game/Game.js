@@ -41,20 +41,10 @@ class Game extends React.Component {
 
   // G A M E  S E T U P
 
-  componentDidMount() {
-    const { authed, player } = this.props;
-    if (authed && player.userName.startsWith("ezm0de")) {
-      this.easyModeCards();
-      this.setState({ loading: false });
-    } else
+  componentDidMount() { 
     this.getCards();
     this.setState({ loading: false });
-  }
-
-  easyModeCards = () => {
-    const stack = getCards.cards;
-    this.setState({ stack });
-  };
+  } 
 
   getCards = () => {
     const stack = getCards.getCards();
@@ -245,10 +235,6 @@ class Game extends React.Component {
       matches: 0,
     });
     setTimeout(() => {
-      if (this.props.authed && this.props.player.userName.startsWith("ezm0de")) {
-        this.easyModeCards();
-        this.setState({ loading: false });
-      } else
       this.getCards();
       this.setState({ loading: false });
     }, 1000);
