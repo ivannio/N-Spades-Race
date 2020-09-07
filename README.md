@@ -5,7 +5,7 @@
 Super Mix N Match is a mobile focused card game based on a Super Mario Bros. 3 mini-game. Users compete to obtain the shortest time of completion as they flip over cards and look for matches while remembering card locations.
 
 ## Demo
-I plan to have a live version of Super Mix N Match available soon, but for now please check out a short video demonstration of the app [here.](https://www.linkedin.com/posts/ivan-phelps_today-i-graduated-nashville-software-schools-activity-6697598744491368449-j3zf)
+I plan to have a live version of Super Mix N Match available soon, but for now please check out a short video demonstration of the app [here.](https://vimeo.com/446657208)
 
 ## Technologies Used
 
